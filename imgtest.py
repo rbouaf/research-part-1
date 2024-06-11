@@ -35,6 +35,9 @@ while n < 8 :
               "image_url": {
                 "url": (url[n])
               }
+
+              # simply push another image (our screenshot), prompt will still work
+
             }
           ]
         }
@@ -42,4 +45,19 @@ while n < 8 :
   )
   print(completion.choices[0].message)
   n+=1
+
+  # make a 'check' function that verifies that the 3 categories
+  # are in the list of topics and that they are unique (avoid hallucinations)
+
+  # we can instead push to an array in the loop 
+  # and print the array outside of the loop after
+  # we can also stringify the completion choices to remove the useless stuff
+
+
+  # print (the whole array that contains all of the clean completions)
+
+  # run this code concurrently with the other code that scrolls reels? 
+  # or run it after the scrolling is done? (current status quo)
+
+  # we could use this code (the AI classifier) to itself choose what to watch or not
 
