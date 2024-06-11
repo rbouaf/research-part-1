@@ -10,7 +10,6 @@ import time
 import requests
 from bs4 import BeautifulSoup
 import re
-import config
 import json
 import os
 from urllib.parse import urlparse
@@ -18,11 +17,16 @@ import csv
 
 # specify the path to chromedriver.exe (download and save on your computer)
 driver = webdriver.Chrome()
+
+# wait variables
+wait5 = WebDriverWait(driver, 5)
+wait10 = WebDriverWait(driver, 10)
+
 # open the webpage
 driver.get("https://www.instagram.com/")
 
-username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='username']")))
-password = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
+username = wait10.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='username']")))
+password = wait10.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
 # enter username and password
 username.clear()
 username.send_keys("minesweeper_enthusiast")  # username
@@ -39,7 +43,7 @@ button = WebDriverWait(driver, 2).until(
 # Assuming you have already logged in and are on the "Save Login Info" screen
 # try:
 #     # Wait for the "Save Login Info" button and click "Not Now"
-#     not_now_button = WebDriverWait(driver, 10).until(
+#     not_now_button = wait10.until(
 #         EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))
 #     )
 #     not_now_button.click()
@@ -48,7 +52,7 @@ button = WebDriverWait(driver, 2).until(
 
 # try:
 #     # Wait for the "Save Login Info" button and click "Not Now"
-#     not_now_button = WebDriverWait(driver, 10).until(
+#     not_now_button = wait10.until(
 #         EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[role="button"][tabindex="0"]'))
 #     )
 #     not_now_button.click()
@@ -60,7 +64,7 @@ button = WebDriverWait(driver, 2).until(
 
 # try:
 #     # Wait for the "Not Now" button to be clickable and then click it
-#     not_now_button = WebDriverWait(driver, 10).until(
+#     not_now_button = wait10.until(
 #         EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now") or contains(text(), "Not now")]'))
 #     )
 #     not_now_button.click()
@@ -71,7 +75,7 @@ def click_not_now_button(driver, retries=5):
     for i in range(retries):
         try:
             # Wait for the "Not Now" button to be clickable
-            not_now_button = WebDriverWait(driver, 10).until(
+            not_now_button = wait10.until(
                 EC.element_to_be_clickable((By.XPATH,
                                             '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div/div/div/div'))
             )
@@ -84,7 +88,7 @@ def click_not_now_button(driver, retries=5):
             time.sleep(2)  # Wait before retrying
 click_not_now_button(driver)
 
-Not_Now_button = WebDriverWait(driver, 10).until(
+Not_Now_button = wait10.until(
     EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]'))
 )
 Not_Now_button.click()
@@ -102,37 +106,18 @@ print("Opened Reels")
 
 time.sleep(5)
 
-# # press the Down Arrow Key to scroll down
-# while True:
-#     # Locate the current reel element (adjust the selector as needed)
-#     reel_element = driver.find_element(By.XPATH, '//div[@role="dialog"]//video')
-#
-#     # Perform actions on the reel element if needed (e.g., extracting information)
-#     # Example: print the reel source URL
-#     print(reel_element.get_attribute('src'))
-#
-#     # Wait for a few seconds to simulate viewing the reel
-#     time.sleep(3)
-#
-#     # Move to the next reel by simulating a right arrow key press
-#     body = driver.find_element(By.CSS_SELECTOR, 'body')
-#     body.send_keys(Keys.ARROW_DOWN)
-#
-#     # Optionally, add a break condition to stop scrolling after a certain number of reels
-# Create a WebDriverWait object with a timeout of 10 seconds
-wait = WebDriverWait(driver, 5)
-# find element with property tabindex=0
+
 reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
 counter = 0
 while True:
     try:
         # Wait for the reel video element to be present and then find it
-        # reel_element = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@role="dialog"]//video')))
+        # reel_element = wait5.until(EC.presence_of_element_located((By.XPATH, '//div[@role="dialog"]//video')))
         #
         # # Perform actions on the reel element if needed (e.g., extracting information)
         # # Example: print the reel source URL
         # print(reel_element.get_attribute('src'))
-        #
+
         # # Wait for a few seconds to simulate viewing the reel
         # time.sleep(3)
 
@@ -140,7 +125,7 @@ while True:
         counter+=1
         print("Scrolling down "+str(counter))
         reels.send_keys(Keys.ARROW_DOWN)
-        time.sleep(30000)
+        time.sleep(20000)
 
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:

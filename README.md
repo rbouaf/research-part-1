@@ -1,1 +1,2 @@
-# comp396
+# COMP 396 Research Project
+
