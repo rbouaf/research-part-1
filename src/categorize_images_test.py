@@ -1,5 +1,5 @@
 from openai import OpenAI
-with open('topiclist.txt', 'r') as file:
+with open('../topic_list.txt', 'r') as file:
     content = file.read()
 client = OpenAI(
     api_key="sk-proj-UIx0DjExZFZ3K8zNgOZmT3BlbkFJj0cGIb1imfb4V3840rQY"
