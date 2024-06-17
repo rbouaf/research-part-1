@@ -47,7 +47,16 @@ while n < len(thumbnails) :
 print(posts)
 print(errors)  
 
-  # run this code concurrently with the other code that scrolls reels? 
+# run this code concurrently with the other code that scrolls reels? 
+# we could use this topic classifier for our agent to choose what to watch
 
-  # we could use this code (the AI classifier) to itself choose what to watch or not
+# i am going to have to implement selenium to download the thumbnails from the reels
+# then i'll need to get the downloaded tn into the gpt4-o request, maybe by link
+  # if I need the link, i'll likely upload to aws s3 which would take a bit of effort and $0.00Xs
 
+# i'll then need to figure out how to get a screenshot t+3 seconds into the reel
+  # same process to upload/input file into gpt request, with the hope of more accuracy
+
+# one issue that could come up is the runtime, if i want to make decisions with it
+# ie: should it continue watching the video or not? (if these are the topic it seeks)
+# given that the code may take 5s to execute, it could skew our watch times. 
