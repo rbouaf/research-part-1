@@ -139,7 +139,6 @@
 'Performances',
 'Instruments',
 'Singers',
-'Comedy',
 'Games',
 'Video Games',
 'Toys',
