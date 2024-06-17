@@ -18,7 +18,7 @@ while n < len(thumbnails) :
       {"role": "system",
         "content": [{"type": "text",
                     "text": 
-                    "You are a precise image analyst. YOU ABSOLUTELY MUST PICK 3  OF THE MOST RELEVANT TOPICS FROM THE FOLLOWING LIST: "+(topics)+" . DO NOT SAY ANYTHING IF ITS NOT A TOPIC FROM THIS LIST. IF YOU DONT KNOW EXACTLY, TAKE A GUESS, IT DOESNT HAVE TO BE PERFECT. IF THE PICTURE HAS A CAPTION, IT POSSIBLY HAS A COMEDY TOPIC."}],
+                    "You are a precise image analyst. YOU ABSOLUTELY MUST PICK 3  OF THE MOST RELEVANT TOPICS FROM THE FOLLOWING LIST: "+(topics)+" . DO NOT SAY ANYTHING IF ITS NOT A TOPIC FROM THIS LIST. IF YOU DONT KNOW EXACTLY, TAKE A GUESS, IT DOESNT HAVE TO BE PERFECT. IF THE PICTURE HAS A CAPTION, IT POSSIBLY INCLUDES THE 'COMEDY' TOPIC."}],
       },
         {
           "role": "user",
