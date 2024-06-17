@@ -14,9 +14,21 @@ import json
 import os
 from urllib.parse import urlparse
 import csv
+from selenium import webdriver
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 
-# specify the path to chromedriver.exe (download and save on your computer)
-driver = webdriver.Chrome()
+# Set up the proxy to use Mitmproxy
+proxy = Proxy()
+proxy.proxy_type = ProxyType.MANUAL
+proxy.http_proxy = '127.0.0.1:8080'
+proxy.ssl_proxy = '127.0.0.1:8080'
+
+# Set up Chrome options to use Mitmproxy
+chrome_options = Options()
+chrome_options.add_argument('--proxy-server=http://127.0.0.1:8080')
+
+# Initialize the WebDriver with options
+driver = webdriver.Chrome(options=chrome_options)
 
 # wait variables
 wait5 = WebDriverWait(driver, 5)
@@ -125,7 +137,7 @@ while True:
         counter+=1
         print("Scrolling down "+str(counter))
         reels.send_keys(Keys.ARROW_DOWN)
-        time.sleep(3)
+        time.sleep(3000)
 
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:
