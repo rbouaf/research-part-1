@@ -17,6 +17,15 @@ import csv
 from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 
+
+with open("../data/counter.txt", "r") as file:
+    count = int(file.read())
+with open("../data/counter.txt", "w") as file:
+    file.write(str(count + 1))
+print(count)
+
+
+# Setting up
 # Set up the proxy to use Mitmproxy
 proxy = Proxy()
 proxy.proxy_type = ProxyType.MANUAL
@@ -34,6 +43,8 @@ driver = webdriver.Chrome(options=chrome_options)
 wait5 = WebDriverWait(driver, 5)
 wait10 = WebDriverWait(driver, 10)
 
+
+######################################################################################################
 # open the webpage
 driver.get("https://www.instagram.com/")
 
@@ -47,42 +58,9 @@ password.send_keys("marco1231$")  # password
 button = WebDriverWait(driver, 2).until(
     EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))).click()  # clicking submit button
 
+# Logged in now
 
-############################################################################################################
-
-# not_button = WebDriverWait(driver, 20).until(
-#     EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]')))
-# Assuming you have already logged in and are on the "Save Login Info" screen
-# try:
-#     # Wait for the "Save Login Info" button and click "Not Now"
-#     not_now_button = wait10.until(
-#         EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))
-#     )
-#     not_now_button.click()
-# except Exception as e:
-#     print("Error encountered:", e)
-
-# try:
-#     # Wait for the "Save Login Info" button and click "Not Now"
-#     not_now_button = wait10.until(
-#         EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[role="button"][tabindex="0"]'))
-#     )
-#     not_now_button.click()
-# except Exception as e:
-#     print("Error encountered:", e)
-
-# Print page source for debugging
-# print(driver.page_source)
-
-# try:
-#     # Wait for the "Not Now" button to be clickable and then click it
-#     not_now_button = wait10.until(
-#         EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now") or contains(text(), "Not now")]'))
-#     )
-#     not_now_button.click()
-# except Exception as e:
-#     print("Error encountered:", e)
-
+# click on not now buttons
 def click_not_now_button(driver, retries=5):
     for i in range(retries):
         try:
@@ -100,6 +78,7 @@ def click_not_now_button(driver, retries=5):
             time.sleep(2)  # Wait before retrying
 click_not_now_button(driver)
 
+# click on not now button
 Not_Now_button = wait10.until(
     EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]'))
 )
@@ -116,28 +95,20 @@ print("Clicked 'Not Now'")
 driver.get('https://www.instagram.com/reels/')
 print("Opened Reels")
 
-time.sleep(5)
-
-
+time.sleep(3)
+######################################################################################################
+# Now in REELS
 reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
-counter = 0
+debug_counter = 0
 while True:
     try:
-        # Wait for the reel video element to be present and then find it
-        # reel_element = wait5.until(EC.presence_of_element_located((By.XPATH, '//div[@role="dialog"]//video')))
-        #
-        # # Perform actions on the reel element if needed (e.g., extracting information)
-        # # Example: print the reel source URL
-        # print(reel_element.get_attribute('src'))
+        #debug
+        time.sleep(300)
+        debug_counter+=1
+        print("Scrolling down "+str(debug_counter))
 
-        # # Wait for a few seconds to simulate viewing the reel
-        # time.sleep(3)
-
-        # Move to the next reel by simulating a right arrow key press
-        counter+=1
-        print("Scrolling down "+str(counter))
+        # Scroll down to load more reels
         reels.send_keys(Keys.ARROW_DOWN)
-        time.sleep(3000)
 
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:
