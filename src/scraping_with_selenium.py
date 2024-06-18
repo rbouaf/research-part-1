@@ -123,16 +123,7 @@ reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
 counter = 0
 while True:
     try:
-        # Wait for the reel video element to be present and then find it
-        # reel_element = wait5.until(EC.presence_of_element_located((By.XPATH, '//div[@role="dialog"]//video')))
-        #
-        # # Perform actions on the reel element if needed (e.g., extracting information)
-        # # Example: print the reel source URL
-        # print(reel_element.get_attribute('src'))
-
-        # # Wait for a few seconds to simulate viewing the reel
-        # time.sleep(3)
-
+        
         # Move to the next reel by simulating a right arrow key press
         counter+=1
         print("Scrolling down "+str(counter))
