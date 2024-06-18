@@ -19,7 +19,7 @@ chrome_options = Options()
 chrome_options.add_argument('--proxy-server=http://127.0.0.1:8080')
 
 # Initialize the WebDriver with options
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome()
 
 # wait variables
 wait5 = WebDriverWait(driver, 5)
@@ -77,9 +77,21 @@ while True:
         counter+=1
         print("Scrolling down "+str(counter))
         reels.send_keys(Keys.ARROW_DOWN)
-        time.sleep(3000)
+        time.sleep(2)
 
+        # get thumnail and store as current_thumbnail
+        current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
+        link = current_thumbnail.get_attribute('src')
+        print(link)
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:
         print(f"An error occurred: {e}")
         break
+
+    # current video (the active one)
+    # xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj // xuzhngd // 
+    
+    # next video
+    # xz74otr x1bs05mj x5yr21d // x1ptxcow // x10l6tqk x1d8287x x19991ni xwzpupj
+    
+    
