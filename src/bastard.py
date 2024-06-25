@@ -12,15 +12,14 @@ from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 from download import download_image
 
-# Set up the proxy to use Mitmproxy
-proxy = Proxy()
-proxy.proxy_type = ProxyType.MANUAL
-proxy.http_proxy = '127.0.0.1:8080'
-proxy.ssl_proxy = '127.0.0.1:8080'
+def global_counter():
+    with open("../data/screenshots/sc_counter.txt", "r") as file:
+        count = int(file.read())
+    with open("../data/screenshots/sc_counter.txt", "w") as file:
+        file.write(str(count + 1))
+    return count
 
-# Set up Chrome options to use Mitmproxy
-chrome_options = Options()
-chrome_options.add_argument('--proxy-server=http://127.0.0.1:8080')
+counter = global_counter()
 
 # Initialize the WebDriver with options
 driver = webdriver.Chrome()
@@ -86,15 +85,12 @@ while True:
         # get thumnail and store as current_thumbnail
         current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
         link = current_thumbnail.get_attribute('src')
-        print(link)
 
-        # turn link into download 
-        download_image(link, 'thumbnails', f'thumbnail{counter}.png')
-
-        # turn download into immutable AWS link (will repeat for second screenshot too)
+        # download thumbnail link
+        download_image(link, '../data/screenshots/', f'{global_counter}sc{counter}-1.png')
 
         # get second screenshot
-        time.sleep(2)
+        time.sleep(1.5)
         png = driver.get_screenshot_as_png()
         im = Image.open(BytesIO(png))
         left = 745
@@ -102,7 +98,22 @@ while True:
         right = 1295
         bottom = 1048
         im = im.crop((left, top, right, bottom))
-        im.save(f'screenshot{counter}-2.png')
+        im.save('../data/screenshots/'+f'{global_counter}sc{counter}-2.png')
+
+        # get third screenshot
+        time.sleep(1.5)
+        png = driver.get_screenshot_as_png()
+        im = Image.open(BytesIO(png))
+        left = 745
+        top = 70
+        right = 1295
+        bottom = 1048
+        im = im.crop((left, top, right, bottom))
+        im.save('../data/screenshots/'+f'{global_counter}sc{counter}-3.png')
+
+        # turn download into immutable AWS link (will repeat for second screenshot too)
+
+
 
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:
