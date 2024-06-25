@@ -1,0 +1,7 @@
+- [ ] like_count
+- [ ] comment_count
+- [ ] trending
+- [ ] has_viewer_saved
+- [ ] has_liked
+- [ ] friendship_status
+- [ ] is_private
