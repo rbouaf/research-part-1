@@ -83,6 +83,9 @@ while True:
         current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
         link = current_thumbnail.get_attribute('src')
         print(link)
+
+        # get second screenshot
+
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -90,8 +93,10 @@ while True:
 
     # current video (the active one)
     # xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj // xuzhngd // 
+    # this is the id of our active video
     
     # next video
     # xz74otr x1bs05mj x5yr21d // x1ptxcow // x10l6tqk x1d8287x x19991ni xwzpupj
+    # this is the id of all other videos (ids don't change, they have as a serverside var)
     
     
