@@ -48,6 +48,8 @@ driver = webdriver.Chrome(options=chrome_options)
 # wait variables
 wait5 = WebDriverWait(driver, 5)
 wait10 = WebDriverWait(driver, 10)
+wait2 = WebDriverWait(driver, 2)
+
 
 
 ######################################################################################################
@@ -109,10 +111,17 @@ debug_counter = 0
 while True:
     try:
         #debug
-        time.sleep(1)
+        time.sleep(100000)
         debug_counter+=1
         print("Scrolling down "+str(debug_counter))
 
+        # Like the reel
+        try:
+            like_button = wait2.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'svg[aria-label="Like"]')))
+            like_button.click()
+            print("Liked the reel")
+        except NoSuchElementException:
+            print("Like button not found")
         # Scroll down to load more reels
         reels.send_keys(Keys.ARROW_DOWN)
 
