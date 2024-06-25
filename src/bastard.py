@@ -10,6 +10,8 @@ from selenium.webdriver.chrome.options import Options
 import time
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 
+from download import download_image
+
 # Set up the proxy to use Mitmproxy
 proxy = Proxy()
 proxy.proxy_type = ProxyType.MANUAL
@@ -85,6 +87,11 @@ while True:
         current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
         link = current_thumbnail.get_attribute('src')
         print(link)
+
+        # turn link into download 
+        download_image(link, 'thumbnails', f'thumbnail{counter}.png')
+
+        # turn download into immutable AWS link (will repeat for second screenshot too)
 
         # get second screenshot
         time.sleep(2)

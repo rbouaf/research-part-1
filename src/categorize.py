@@ -2,7 +2,7 @@ from openai import OpenAI
 from data.topic_list.topic_list import list_topics
 with open('../data/topic_list/topic_list.txt', 'r') as file: topics = file.read()
 client = OpenAI(api_key="sk-proj-UIx0DjExZFZ3K8zNgOZmT3BlbkFJj0cGIb1imfb4V3840rQY")
-thumbnails = ["https://instagram.fymq2-1.fna.fbcdn.net/v/t51.29350-15/447812387_835561961812626_7109181616597521791_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi43MjB4MTI4MC5zZHIuZjI5MzUwIn0&_nc_ht=instagram.fymq2-1.fna.fbcdn.net&_nc_cat=1&_nc_ohc=sC_BLUYAI04Q7kNvgGzGmZK&edm=APb0JzIBAAAA&ccb=7-5&ig_cache_key=MzM4Mzg5NjkyNDU0ODM1MDUwOA%3D%3D.2-ccb7-5&oh=00_AYBx28ZmMlyzc2yLx8lNLM0dGpjH6AEoqGzqVmIxPXAElg&oe=66763EA8&_nc_sid=cf751b","https://instagram.fymq2-1.fna.fbcdn.net/v/t51.29350-15/446100134_827185172728333_6074243709158091986_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi43MjB4MTI4MC5zZHIuZjI5MzUwIn0&_nc_ht=instagram.fymq2-1.fna.fbcdn.net&_nc_cat=101&_nc_ohc=_WiIWMopUGwQ7kNvgF309E8&edm=APb0JzIBAAAA&ccb=7-5&ig_cache_key=MzM3NTg1MTI4OTE5ODYzOTgzOQ%3D%3D.2-ccb7-5&oh=00_AYCuGEeWFqmEnfsLviTjr2ZV6KmwyNlU9kvk6KffFT-dBw&oe=667657FD&_nc_sid=cf751b", "https://scontent-atl3-1.cdninstagram.com/v/t51.29350-15/447069317_1005268591223122_1451587755951200632_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi43MjB4MTI4MC5zZHIuZjI5MzUwIn0&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=110&_nc_ohc=5HrbmB9B4nEQ7kNvgGv-8aC&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzM4MDgwNjg1ODQzMTY3MjQ2OA%3D%3D.2-ccb7-5&oh=00_AYC12-l4IbE6ObSnJ7MW_UWUVUJqFbJOVEeNmOEtuEBtRg&oe=6677916B&_nc_sid=10d13bScrolling"]
+thumbnails = ["https://scontent.cdninstagram.com/v/t51.29350-15/448057032_1066199521605936_1057061306196734606_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi43MjB4MTI4MS5zZHIuZjI5MzUwIn0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=Zc4vxvTyKWMQ7kNvgHFvsLs&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzM4NTQ4Mzg4MjI1NzA0Njg1OA%3D%3D.2-ccb7-5&oh=00_AYB6f_2Xh5YBUzYvUMU6e4H5zZe3hXAkGgpkOskeqryBOA&oe=6680F169&_nc_sid=10d13b", "https://scontent.cdninstagram.com/v/t51.29350-15/444885009_1163255358252264_668982721321306254_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi40MTZ4NzQwLnNkci5mMjkzNTAifQ&_nc_ht=scontent.cdninstagram.com&_nc_cat=100&_nc_ohc=i1pAX-a27lwQ7kNvgETkuhZ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzM3MTM3OTEzMzg0OTk5NjQ3OQ%3D%3D.2-ccb7-5&oh=00_AYDRZLaZ3k6rMM_yPWcWgHQbuy05D3d4GqeDG5WGuQ0qaA&oe=6680F0FC&_nc_sid=10d13b"]
 posts = []
 errors = []
 n=0
@@ -53,9 +53,6 @@ print(errors)
 # i am going to have to implement selenium to download the thumbnails from the reels
 # then i'll need to get the downloaded tn into the gpt4-o request, maybe by link
   # if I need the link, i'll likely upload to aws s3 which would take a bit of effort and $0.00Xs
-
-# i'll then need to figure out how to get a screenshot t+3 seconds into the reel
-  # same process to upload/input file into gpt request, with the hope of more accuracy
 
 # one issue that could come up is the runtime, if i want to make decisions with it
 # ie: should it continue watching the video or not? (if these are the topic it seeks)
