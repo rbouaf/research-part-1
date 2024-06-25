@@ -18,12 +18,18 @@ from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 
-with open("../data/counter.txt", "r") as file:
+######################################################################################################
+# MUST RUN mitmdump -s requests.py in terminal before running this script ############################
+######################################################################################################
+
+with open("../data/logging_client_events/counter.txt", "r") as file:
     count = int(file.read())
-with open("../data/counter.txt", "w") as file:
+with open("../data/logging_client_events/counter.txt", "w") as file:
     file.write(str(count + 1))
 print(count)
-
+with open("../data/logging_client_events/counter.txt", "r") as file:
+    count_updated = int(file.read())
+print(count_updated)
 
 # Setting up
 # Set up the proxy to use Mitmproxy
@@ -103,7 +109,7 @@ debug_counter = 0
 while True:
     try:
         #debug
-        time.sleep(300)
+        time.sleep(1)
         debug_counter+=1
         print("Scrolling down "+str(debug_counter))
 
