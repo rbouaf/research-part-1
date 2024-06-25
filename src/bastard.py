@@ -1,5 +1,7 @@
 # Import dependencies
 from selenium import webdriver
+from PIL import Image
+from io import BytesIO
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -85,6 +87,15 @@ while True:
         print(link)
 
         # get second screenshot
+        time.sleep(2)
+        png = driver.get_screenshot_as_png()
+        im = Image.open(BytesIO(png))
+        left = 745
+        top = 70
+        right = 1295
+        bottom = 1048
+        im = im.crop((left, top, right, bottom))
+        im.save(f'screenshot{counter}-2.png')
 
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:
