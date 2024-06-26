@@ -13,9 +13,9 @@ from selenium.webdriver.common.proxy import Proxy, ProxyType
 from download import download_image
 
 def global_counter():
-    with open("../data/screenshots/sc_counter.txt", "r") as file:
+    with open("../junk/sc_counter.txt", "r") as file:
         count = int(file.read())
-    with open("../data/screenshots/sc_counter.txt", "w") as file:
+    with open("../junk/sc_counter.txt", "w") as file:
         file.write(str(count + 1))
     return count
 

@@ -1,6 +1,6 @@
 from openai import OpenAI
 from data.topic_list.topic_list import list_topics
-from data.aws.credentials import openai_api_key
+from data.keys import openai_api_key
 with open('../data/topic_list/topic_list.txt', 'r') as file: topics = file.read()
 client = OpenAI(openai_api_key)
 thumbnails = ["https://scontent.cdninstagram.com/v/t51.29350-15/448057032_1066199521605936_1057061306196734606_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi43MjB4MTI4MS5zZHIuZjI5MzUwIn0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=Zc4vxvTyKWMQ7kNvgHFvsLs&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzM4NTQ4Mzg4MjI1NzA0Njg1OA%3D%3D.2-ccb7-5&oh=00_AYB6f_2Xh5YBUzYvUMU6e4H5zZe3hXAkGgpkOskeqryBOA&oe=6680F169&_nc_sid=10d13b", "https://scontent.cdninstagram.com/v/t51.29350-15/444885009_1163255358252264_668982721321306254_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi40MTZ4NzQwLnNkci5mMjkzNTAifQ&_nc_ht=scontent.cdninstagram.com&_nc_cat=100&_nc_ohc=i1pAX-a27lwQ7kNvgETkuhZ&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzM3MTM3OTEzMzg0OTk5NjQ3OQ%3D%3D.2-ccb7-5&oh=00_AYDRZLaZ3k6rMM_yPWcWgHQbuy05D3d4GqeDG5WGuQ0qaA&oe=6680F0FC&_nc_sid=10d13b"]
