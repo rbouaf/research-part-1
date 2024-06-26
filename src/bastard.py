@@ -10,16 +10,19 @@ from selenium.webdriver.chrome.options import Options
 import time
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 
-from download import download_image
+from data.keys.credentials import aws_access_key_id, aws_secret_access_key
 
-def global_counter():
-    with open("../junk/sc_counter.txt", "r") as file:
+from src.download import download_image
+from src.aws import upload_to_s3
+
+def counter():
+    with open("junk/sc_counter.txt", "r") as file:
         count = int(file.read())
-    with open("../junk/sc_counter.txt", "w") as file:
+    with open("junk/sc_counter.txt", "w") as file:
         file.write(str(count + 1))
     return count
 
-counter = global_counter()
+global_counter = counter()
 
 # Initialize the WebDriver with options
 driver = webdriver.Chrome()
@@ -72,13 +75,13 @@ time.sleep(5)
 
 
 reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
-counter = 0
+localcounter = 0
 while True:
     try:
         
         # Move to the next reel by simulating a right arrow key press
-        counter+=1
-        print("Scrolling down "+str(counter))
+        localcounter+=1
+        print("Scrolling down "+str(localcounter))
         reels.send_keys(Keys.ARROW_DOWN)
         time.sleep(2)
 
@@ -86,9 +89,10 @@ while True:
         current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
         link = current_thumbnail.get_attribute('src')
 
-        # download thumbnail link
-        download_image(link, '../data/screenshots/', f'{global_counter}sc{counter}-1.png')
-
+        # download thumbnail link & upload to s3
+        download_image(link, 'data/screenshots/', f'{global_counter}sc{localcounter}-1.png')
+        upload_to_s3('data/screenshots/'+f'{global_counter}sc{localcounter}-1.png', 'socialcomputing', f'ig_reels/{global_counter}sc{localcounter}-1.png', aws_access_key_id, aws_secret_access_key)
+        
         # get second screenshot
         time.sleep(1.5)
         png = driver.get_screenshot_as_png()
@@ -98,7 +102,8 @@ while True:
         right = 1295
         bottom = 1048
         im = im.crop((left, top, right, bottom))
-        im.save('../data/screenshots/'+f'{global_counter}sc{counter}-2.png')
+        im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-2.png')
+        upload_to_s3('data/screenshots/'+f'{global_counter}sc{localcounter}-2.png', 'socialcomputing', f'ig_reels/{global_counter}sc{localcounter}-2.png', aws_access_key_id, aws_secret_access_key)
 
         # get third screenshot
         time.sleep(1.5)
@@ -109,11 +114,8 @@ while True:
         right = 1295
         bottom = 1048
         im = im.crop((left, top, right, bottom))
-        im.save('../data/screenshots/'+f'{global_counter}sc{counter}-3.png')
-
-        # turn download into immutable AWS link (will repeat for second screenshot too)
-
-
+        im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-3.png')
+        upload_to_s3('data/screenshots/'+f'{global_counter}sc{localcounter}-3.png', 'socialcomputing', f'ig_reels/{global_counter}sc{localcounter}-3.png', aws_access_key_id, aws_secret_access_key)
 
         # Optionally, add a break condition to stop scrolling after a certain number of reels
     except Exception as e:

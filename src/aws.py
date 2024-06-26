@@ -2,7 +2,7 @@ import boto3
 import os
 from data.keys.credentials import aws_access_key_id, aws_secret_access_key
 
-def upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_access_key, ExtraArgs={'ContentType': 'image/jpeg'}):
+def upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_access_key):
     # Initialize a session using Amazon S3
     s3 = boto3.client(
         's3', 
@@ -12,7 +12,7 @@ def upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_a
 
     try:
         # Upload the file
-        s3.upload_file(file_path, bucket_name, s3_key, ExtraArgs={'ContentType': 'image/jpeg'})
+        s3.upload_file(file_path, bucket_name, s3_key, ExtraArgs={'ContentType': 'image/png'})
         print(f"Successfully uploaded {file_path} to s3://{bucket_name}/{s3_key}")
     except Exception as e:
         print(f"Failed to upload {file_path} to s3://{bucket_name}/{s3_key}")
@@ -29,4 +29,4 @@ for file_name in os.listdir(folder_path):
     file_path = os.path.join(folder_path, file_name)
     if os.path.isfile(file_path):
         s3_key = f"ig_reels/{file_name}"  # S3 key (path in the bucket)
-        upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_access_key, ExtraArgs={'ContentType': 'image/jpeg'})
+        upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_access_key)
