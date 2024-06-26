@@ -13,7 +13,6 @@ def download_image(url, folder_path, file_name):
     if response.status_code == 200:
         with open(file_path, 'wb') as file:
             file.write(response.content)
-        print(f"Downloaded {file_name} from {url}")
     else:
         print(f"Failed to download {url}")
 

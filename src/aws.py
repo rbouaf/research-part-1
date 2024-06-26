@@ -24,9 +24,3 @@ folder_path = 'data/screenshots'
 # S3 bucket name
 bucket_name = "socialcomputing"
 
-# Upload each file in the folder to S3
-for file_name in os.listdir(folder_path):
-    file_path = os.path.join(folder_path, file_name)
-    if os.path.isfile(file_path):
-        s3_key = f"ig_reels/{file_name}"  # S3 key (path in the bucket)
-        upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_access_key)
