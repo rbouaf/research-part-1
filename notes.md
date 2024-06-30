@@ -1,7 +1,6 @@
-- [ ] like_count
-- [ ] comment_count
-- [ ] trending
-- [ ] has_viewer_saved
-- [ ] has_liked
-- [ ] friendship_status
-- [ ] is_private
+- [ ] like_count `can get it from selenium`
+- [ ] comment_count `can get it from selenium`
+- [ ] trending `cannot get it from selenium`
+- [ ] has_viewer_saved `can get it from selenium`
+- [ ] has_liked `can get it from selenium`
+- [ ] friendship_status `can get it from selenium`

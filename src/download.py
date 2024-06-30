@@ -1,4 +1,4 @@
-import requests
+import logs
 import os
 
 def download_image(url, folder_path, file_name):
@@ -9,7 +9,7 @@ def download_image(url, folder_path, file_name):
     file_path = os.path.join(folder_path, file_name)
 
     # Download the image
-    response = requests.get(url)
+    response = logs.get(url)
     if response.status_code == 200:
         with open(file_path, 'wb') as file:
             file.write(response.content)
