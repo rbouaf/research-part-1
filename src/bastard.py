@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from concurrent.futures import ThreadPoolExecutor
 import time
+import random
 
 from data.keys.credentials import aws_access_key_id, aws_secret_access_key
 
@@ -125,12 +126,75 @@ while True:
         # and we'll be able to take actions based on this classification, such as a 'like'
 
         # all that's left is to implement these functions based on the classification
+        # first we'll make the function before implementing a simple 'if then' to use them
+        
+        # get current reel for our functions to act on
+        current_reel = driver.find_element(By.CLASS_NAME, 'xuzhngd')
+        print("got current reel")
+        # get parent div
+        parent_div = current_reel.find_element(By.XPATH, '.. /.. /..')
+        print("got parent div")
+
+        def get_like_button():
+            like_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Like"]')
+            print("got like button")
+            return like_button
+        
+        def get_save_button():
+            save_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Save"]')
+            print("got like button")
+            return save_button
+        
+        def get_follow_button():
+            follow_button = parent_div.find_element(By.XPATH, "//div[text()='Follow']")
+            print("got follow button")
+            return follow_button
+        
+        def generate_random_comment():
+            comments = [
+                "Awesome video! Loved it!",
+                "This is exactly what I needed to see today!",
+                "Amazing content as always!",
+                "Love this video! Keep it up!",
+                "So insightful and well-made!",
+                "Thanks for the inspiration!",
+                "Totally agree with this!",
+                "Fantastic video! Learned a lot.",
+                "Your videos always make my day!",
+                "Great perspective! Thanks for sharing!"
+            ]
+            
+            return random.choice(comments)
+    
+        def comment_on_reel():
+            comment_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Comment"]')
+            comment_button.click()
+            print("Clicked comment button")
+            textbox = parent_div.find_element(By.CSS_SELECTOR, 'textarea[aria-label="Add a comment…"]')
+            textbox.send_keys(generate_random_comment())
+            textbox.send_keys(Keys.RETURN)
+
+        # Like, save, follow, and comment on the reel
+        
+        like_button = get_like_button()
+        like_button.click()
+        print("Liked the reel")
+        save_button = get_save_button()
+        save_button.click()
+        print("Saved the reel")
+        follow_button = get_follow_button()
+        follow_button.click()
+        print("Followed the user")
+        comment_on_reel()
+        print("Commented on the reel")
+        
 
         # Move to the next reel by simulating a down arrow key press
         time.sleep(0.5)
         print("Scrolling down "+str(localcounter))
         reels.send_keys(Keys.ARROW_DOWN)
         # works great but naming convention is weird on AWS 1 10 2 .. 8 9 is the order. so 001 file names may be better 
+        
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -138,4 +202,9 @@ while True:
 
     # current video (the active one)
     # xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj // xuzhngd // 
-    # this is the id of our active video
+    # this is the id of our active video which we can use to get attributes
+
+
+    
+
+    
