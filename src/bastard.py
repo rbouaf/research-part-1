@@ -10,6 +10,8 @@ from concurrent.futures import ThreadPoolExecutor
 import time
 import random
 
+from selenium.webdriver.common.action_chains import ActionChains
+
 from data.keys.credentials import aws_access_key_id, aws_secret_access_key
 
 from src.download import download_image
@@ -136,10 +138,30 @@ while True:
         print("got parent div")
 
         def like_post():
-            like_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Like"]')
-            print("got like button")
-            like_button.click()
-            print("Liked the reel")
+            try:
+                # Wait for the SVG element with aria-label="Like" to be present
+                like_button = WebDriverWait(parent_div, 10).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, 'svg[aria-label="Like"]'))
+                )
+                print("Got like button")
+
+                # Scroll into view
+                driver.execute_script("arguments[0].scrollIntoView(true);", like_button)
+
+                # Wait for the element to be clickable
+                like_button = WebDriverWait(parent_div, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, 'svg[aria-label="Like"]'))
+                )
+
+                # Check if the element is still in a valid state
+                if like_button.is_displayed() and like_button.is_enabled():
+                    # Use JavaScript to click the element
+                    driver.execute_script("arguments[0].click();", like_button)
+                    print("Liked the reel")
+                else:
+                    print("Element is obscured or not clickable")
+            except Exception as e:
+                print(f"An error occurred: {e}")
         
         def save_post():
             save_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Save"]')
@@ -182,7 +204,7 @@ while True:
 
         # Like, save, follow, and comment on the reel
         
-        like_post()
+        like_post() # doesnt work
         time.sleep(5)
         save_post()
         time.sleep(5)
