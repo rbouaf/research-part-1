@@ -135,20 +135,23 @@ while True:
         parent_div = current_reel.find_element(By.XPATH, '.. /.. /..')
         print("got parent div")
 
-        def get_like_button():
+        def like_post():
             like_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Like"]')
             print("got like button")
-            return like_button
+            like_button.click()
+            print("Liked the reel")
         
-        def get_save_button():
+        def save_post():
             save_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Save"]')
-            print("got like button")
-            return save_button
+            print("got save button")
+            save_button.click()
+            print("Saved the reel")
         
-        def get_follow_button():
+        def follow_user():
             follow_button = parent_div.find_element(By.XPATH, "//div[text()='Follow']")
             print("got follow button")
-            return follow_button
+            follow_button.click()
+            print("Followed the user")
         
         def generate_random_comment():
             comments = [
@@ -163,32 +166,31 @@ while True:
                 "Your videos always make my day!",
                 "Great perspective! Thanks for sharing!"
             ]
-            
             return random.choice(comments)
     
         def comment_on_reel():
             comment_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Comment"]')
             comment_button.click()
             print("Clicked comment button")
-            textbox = parent_div.find_element(By.CSS_SELECTOR, 'textarea[aria-label="Add a comment…"]')
-            textbox.send_keys(generate_random_comment())
-            textbox.send_keys(Keys.RETURN)
+            time.sleep(3)
+            textbox =  wait10.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Add a comment…']")))
+            textbox =  wait10.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Add a comment…']")))
+            textbox.click()
+            driver.switch_to.active_element.send_keys(generate_random_comment())
+            driver.switch_to.active_element.send_keys(Keys.ENTER)
+            print("Commented on the reel")
 
         # Like, save, follow, and comment on the reel
         
-        like_button = get_like_button()
-        like_button.click()
-        print("Liked the reel")
-        save_button = get_save_button()
-        save_button.click()
-        print("Saved the reel")
-        follow_button = get_follow_button()
-        follow_button.click()
-        print("Followed the user")
+        like_post()
+        time.sleep(5)
+        save_post()
+        time.sleep(5)
+        follow_user()
+        time.sleep(5)
         comment_on_reel()
-        print("Commented on the reel")
+        time.sleep(5)
         
-
         # Move to the next reel by simulating a down arrow key press
         time.sleep(0.5)
         print("Scrolling down "+str(localcounter))
