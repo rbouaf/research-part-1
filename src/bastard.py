@@ -19,9 +19,9 @@ from src.aws import upload_to_s3
 from src.categorize import categorize_images
 
 def counter():
-    with open("junk/sc_counter.txt", "r") as file:
+    with open("../junk/sc_counter.txt", "r") as file:
         count = int(file.read())
-    with open("junk/sc_counter.txt", "w") as file:
+    with open("../junk/sc_counter.txt", "w") as file:
         file.write(str(count + 1))
     return count
 global_counter = counter()

@@ -5,7 +5,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.edge.options import Options
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
 import time
 import logs
@@ -39,15 +40,15 @@ proxy.http_proxy = '127.0.0.1:8080'
 proxy.ssl_proxy = '127.0.0.1:8080'
 
 # Set up Chrome options to use Mitmproxy
-chrome_options = Options()
-chrome_options.add_argument('--proxy-server=http://127.0.0.1:8080')
-chrome_options.add_argument('--headless')  # Enable headless mode
+edge_options = Options()
+edge_options.add_argument('--proxy-server=http://127.0.0.1:8080')
+# chrome_options.add_argument('--headless')  # Enable headless mode
 # chrome_options.add_argument('--disable-gpu')  # Disable GPU acceleration
-# chrome_options.add_argument('--no-sandbox')  # Bypass OS security model
-# chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
+edge_options.add_argument('--no-sandbox')  # Bypass OS security model
+edge_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
 
 # Initialize the WebDriver with options
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Edge(options=edge_options)
 
 # wait variables
 wait5 = WebDriverWait(driver, 5)
@@ -149,22 +150,23 @@ while True:
         ############################## LIKE ########################################
         like_button = get_like_button(current_reel)
         like_button.click()
+        like_button.click()
         print("Liked the reel")
 
         ############################## LIKE COUNT ##################################
         # Move up to the desired parent element
-        desired_parent = like_button.find_element(By.XPATH, "./ancestor::div[5]")
-        print("Got desired parent")
-        print(desired_parent.get_attribute("class"))
-        # Navigate back down to the like count element
-        like_count_element = desired_parent.find_element(By.XPATH,
-                                                         ".//div[@role='button']/div[@class='html-div']/div[@class='html-div']/span[@dir='auto']/span[@class='html-span']")
-
-        # Get the text of the like count
-        like_count = like_count_element.text
+        # desired_parent = like_button.find_element(By.XPATH, "./ancestor::div[5]")
+        # print("Got desired parent")
+        # print(desired_parent.get_attribute("class"))
+        # # Navigate back down to the like count element
+        # like_count_element = desired_parent.find_element(By.XPATH,
+        #                                                  ".//div[@role='button']/div[@class='html-div']/div[@class='html-div']/span[@dir='auto']/span[@class='html-span']")
+        #
+        # # Get the text of the like count
+        # like_count = like_count_element.text
 
         # Print the like count
-        print(f"Like count: {like_count}")
+        # print(f"Like count: {like_count}")
 
 
 
