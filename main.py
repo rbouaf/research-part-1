@@ -50,7 +50,7 @@ except Exception as e:
 
 try:
     print('================ Running scrapes ================')
-    subprocess.run(['python', 'scrapes.py'])
+    subprocess.run(['python', 'scraper.py'])
 except Exception as e:
     print(f"Error running scraping script: {e}")
 

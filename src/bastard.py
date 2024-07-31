@@ -51,22 +51,20 @@ password.send_keys("marco1231$")  # password
 button = WebDriverWait(driver, 2).until(
     EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))).click()  # clicking submit button
 
-def click_not_now_button(driver, retries=5):
-    for i in range(retries):
-        try:
-            # Wait for the "Not Now" button to be clickable
-            not_now_button = wait10.until(
-                EC.element_to_be_clickable((By.XPATH,
-                    '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div/div/div/div'))
-            )
-            # Click the "Not Now" button using JavaScript
-            driver.execute_script("arguments[0].click();", not_now_button)
-            print("Clicked 'not now' button")
-            break
-        except Exception as e:
-            print(f"Attempt {i + 1} failed: {e}")
-            time.sleep(2)  # Wait before retrying
-click_not_now_button(driver)
+for i in range(5):
+    try:
+        # Wait for the "Not Now" button to be clickable
+        not_now_button = wait10.until(
+            EC.element_to_be_clickable((By.XPATH,
+                '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div/div/div/div'))
+        )
+        # Click the "Not Now" button using JavaScript
+        driver.execute_script("arguments[0].click();", not_now_button)
+        print("Clicked 'not now' button")
+        break
+    except Exception as e:
+        print(f"Attempt {i + 1} failed: {e}")
+        time.sleep(2)  # Wait before retrying
 
 def upload_file(number):
     upload_to_s3(f'data/screenshots/{global_counter}sc{localcounter}-{number}.png', 
