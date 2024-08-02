@@ -11,7 +11,6 @@ from selenium.webdriver.edge.options import Options
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
 import time
 
-import edge_driver as ed
 
 def show_request_urls(driver, target_url):
     driver.get(target_url)
