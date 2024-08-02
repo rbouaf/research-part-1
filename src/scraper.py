@@ -19,7 +19,7 @@ import csv
 from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 
-import open_reels as rls
+import open_reels as open_reels
 import edge_driver as ed
 
 driver = ed.driver
@@ -28,12 +28,10 @@ wait5 = ed.wait5
 wait10 = ed.wait10
 wait2 = ed.wait2
 
-rls.open_reels()
 ######################################################################################################
 # Now in REELS                                                                                       #
 ######################################################################################################
 
-debug_counter = 0
 
 
 def get_current_reel(driver):
@@ -43,16 +41,11 @@ def get_current_reel(driver):
 
 
 def scroll():
-    global debug_counter
     reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
-
-    # debug
-    debug_counter += 1
-    print("Scrolling down " + str(debug_counter))
     reels.send_keys(Keys.ARROW_DOWN)
 
 
-def click_like_button(current_reel): #todo debug liking its glitchy sometimes
+def get_like_button(current_reel): #todo debug liking its glitchy sometimes
     # get like button
     like_button = current_reel.find_element(By.CSS_SELECTOR, '[aria-label="Like"]')
     like_button = like_button.find_element(By.XPATH, '.. /.. /.. /.. ')
@@ -95,15 +88,15 @@ def get_profile_button(driver):
     get_profile_name= get_child.find_element(By.XPATH, "./*[2]")
     return get_profile_name
 
-def click_follow_button(current_reel):
+def get_follow_button(current_reel):#todo redo from scratch its too inconsistent
     pass
 
 
-def get_description(current_reel):
+def get_description(current_reel):#todo redo from scratch its too inconsistent
     pass
 
 
-def get_reel_duration(driver):
+def get_reel_duration(current_reel):
     try:
         # # Execute JavaScript to get the video element
         # video_element = driver.execute_script("""
@@ -112,8 +105,7 @@ def get_reel_duration(driver):
         #         .querySelector('video');
         # """)
 
-        video_element = get_current_reel(driver)
-        video_element = video_element.find_element(By.TAG_NAME, 'video')
+        video_element = current_reel.find_element(By.TAG_NAME, 'video')
 
 
 
@@ -140,47 +132,129 @@ def format_seconds(time):
     formatted_time = f"{minutes:02d}:{remaining_seconds:02d}"
     return formatted_time
 
-time.sleep(1)
 
 
-while True:
-    try:
-        time.sleep(1)
+def get_save_button(current_reel):#todo redo from scratch its too inconsistent
 
-        # get current reel
-        current_reel = get_current_reel(driver)
-        print("---["+driver.current_url+"]---")
-        # like
-        # click_like_button(current_reel)
-        # print("+ 1 ❤️")
-
-        # get reel data
-        like_count = get_like_count(current_reel)
-        comment_count = get_comment_count(current_reel)
-        duration = get_reel_duration(driver)
-        print("debug 3")
+    pass
 
 
-        # print reel data
-        print("╔═══════════════════════╗ ♥ "+str(like_count))
-        print("║                       ║ 🗨 "+str(comment_count))
-        print("║ " + format_seconds(duration) + "          ║ 🢅")
-        print("╚═══════════════════════╝ ⇓")
-        uploader = get_profile_button(driver).text
-        print("⬤ " + uploader + " [Fᴏʟʟᴏᴡ]")
-
-        if duration < 1.6:
-            time.sleep(duration)
-        else:
-            time.sleep(duration - 1.6)
-
-        scroll()
+def visit_profile(driver):#todo redo from scratch its too inconsistent
+    pass
 
 
+def click_not_interested(driver):#todo redo from scratch its too inconsistent
+    pass
+
+header = [
+                "account", "session", "url", "reel_like_count", "reel_comment_count",
+                "reel_duration", "watch_time_seconds", "watch_time_percentage", "liked",
+                "positive_comment", "followed", "shared", "saved", "visited_profile",
+                "negative_comment", "not_interested", "datetime"
+            ]
+def scrape(username,  password, session,watch_time_percentage, liked, positive_comment, followed, shared, saved, visited_profile, negative_comment, not_interested, quit_after):
+    counter=0
+    global header
+    with open('../data/output.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(header)
+
+    time.sleep(1)
+
+    open_reels.open_reels(username, password)
+    while counter<= quit_after:
+        try:
+            time.sleep(1)
+
+            # get current reel
+            current_reel = get_current_reel(driver)
+            url = driver.current_url
+            stripped_remove_instagram_com_url = url.replace("https://www.instagram.com/", "")
+
+            print("---["+driver.current_url+"]---")
+
+            if liked:
+                get_like_button(current_reel).click()
+                print("+ 1 ❤️")
+
+            pos_com_left = 0
+            if len(positive_comment) > 1:
+                leave_comment(current_reel, positive_comment)
+                pos_com_left = 1
+                print("+ 1 👍💬")
+
+            if followed:
+                get_follow_button(current_reel).click()
+                print("+ 1 🤴")
+
+            if shared:
+                get_share_button(current_reel).click()
+                print("+ 1 👨‍👦")
+
+            if saved:
+                get_save_button(current_reel).click()
+                print("+ 1 💾")
+
+            if visited_profile:
+                visit_profile(driver).click()
+                print("Visited profile")
+
+            neg_com_left = 0
+            if len(negative_comment) > 1:
+                leave_comment(current_reel, negative_comment)
+                neg_com_left = 1
+                print("+ 1 👎💬")
+
+            if not_interested:
+                click_not_interested(driver)
+                print("Not interested")
+
+
+            # todo fix get_like_count and get_comment_count
+            like_count =1# = get_like_count(current_reel)
+            comment_count =1#= get_comment_count(current_reel)
+            duration = get_reel_duration(current_reel)
+            print("Duration: " + str(duration))
+
+
+            # print reel data
+            # print("╔═══════════════════════╗ ♥ "+str(like_count))
+            # print("║                       ║ 🗨 "+str(comment_count))
+            # print("║ " + format_seconds(duration) + "          ║ 🢅")
+            # print("╚═══════════════════════╝ ⇓")
+            # uploader = get_profile_button(driver).text
+            # print("⬤ " + uploader + " [Fᴏʟʟᴏᴡ]")
+
+            watch_time = duration * watch_time_percentage
+            if watch_time < 1.6:
+                time.sleep(watch_time)
+            else:
+                time.sleep(watch_time - 1.6)
+
+            datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+            data = [
+                [username, session, stripped_remove_instagram_com_url, like_count, comment_count, duration, watch_time,
+                watch_time_percentage, liked, pos_com_left, followed, shared, saved, visited_profile, neg_com_left,
+                not_interested, datetime]
+            ]
+
+            with open('../data/output.csv', 'a', newline='') as csvfile:
+                csv.writer(csvfile).writerows(data)
 
 
 
+            scroll()
+            counter += 1
+            print(str(counter) + " reels watched. Scrolling...")
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        break
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            break
+
+    driver.quit()
+
+
+scrape("minesweeper_enthusiast", "marco1231$", 0, 0.5, 0,
+       "", 0, 0, 0, 0, "",
+       0, 40)

@@ -24,20 +24,20 @@ wait10 = ed.wait10
 wait2 = ed.wait2
 
 
-def open_reels():
+def open_reels(username, password):
     driver.get("https://www.instagram.com/")
     print("[ instagram.com ]")
     # logging in
-    username = wait10.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='username']")))
-    password = wait10.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
+    username_field = wait10.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='username']")))
+    password_field = wait10.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
     # enter username
-    username.clear()
-    username.send_keys("minesweeper_enthusiast")
+    username_field.clear()
+    username_field.send_keys(username)
     # enter password
-    password.clear()
-    password.send_keys("marco1231$")
-    print("[ minesweeper_enthusiast ]")
-    print("[ ********************** ]")
+    password_field.clear()
+    password_field.send_keys(password)
+    print("[ " + username + " ]")
+    print("[ *************** ]")
     # submit
     wait2.until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))).click()
