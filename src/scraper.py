@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 import time
 import csv
 
-import open_ig as open_reels
-import edge_driver as ed
+import src.open_ig as open_reels
+import src.edge_driver as ed
 
 driver = ed.driver
 
@@ -134,7 +134,7 @@ header = [
 def scrape(username,  password, session,watch_time_percentage, liked, positive_comment, followed, shared, saved, visited_profile, negative_comment, not_interested, quit_after):
     counter=0
     global header
-    with open('../data/output.csv', 'w', newline='') as csvfile:
+    with open('output.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(header)
 
@@ -218,7 +218,7 @@ def scrape(username,  password, session,watch_time_percentage, liked, positive_c
                 not_interested, datetime]
             ]
 
-            with open('../data/output.csv', 'a', newline='') as csvfile:
+            with open('output.csv', 'a', newline='') as csvfile:
                 csv.writer(csvfile).writerows(data)
 
 
@@ -234,3 +234,4 @@ def scrape(username,  password, session,watch_time_percentage, liked, positive_c
     driver.quit()
 
 
+# todo

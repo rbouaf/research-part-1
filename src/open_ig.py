@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 import csv
 from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
-import edge_driver as ed
+import src.edge_driver as ed
 
 driver = ed.driver
 
