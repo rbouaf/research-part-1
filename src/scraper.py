@@ -60,8 +60,7 @@ def get_share_button(current_reel):#todo debug share its glitchy sometimes
     pass
 
 
-def get_profile_button(driver):
-    current_reel = get_current_reel(driver)
+def get_profile_button(current_reel):
     element = current_reel.find_element(By.CSS_SELECTOR, '[aria-label*=" reels"]')
     get_child = element.find_element(By.XPATH, "./*")
     get_profile_name= get_child.find_element(By.XPATH, "./*[2]")
@@ -114,22 +113,21 @@ def format_seconds(time):
 
 
 def get_save_button(current_reel):#todo redo from scratch its too inconsistent
-
     pass
 
 
-def visit_profile(driver):#todo redo from scratch its too inconsistent
+def visit_profile(profile_button):#todo redo from scratch its too inconsistent
     pass
 
 
-def click_not_interested(driver):#todo redo from scratch its too inconsistent
+def click_not_interested(current_reel):#todo redo from scratch its too inconsistent
     pass
 
 header = [
                 "account", "session", "url", "reel_like_count", "reel_comment_count",
                 "reel_duration", "watch_time_seconds", "watch_time_percentage", "liked",
                 "positive_comment", "followed", "shared", "saved", "visited_profile",
-                "negative_comment", "not_interested", "datetime"
+                "negative_comment", "not_interested", "uploader", "caption", "datetime"
             ]
 def scrape(username,  password, session,watch_time_percentage, liked, positive_comment, followed, shared, saved, visited_profile, negative_comment, not_interested, quit_after):
     counter=0
@@ -174,8 +172,9 @@ def scrape(username,  password, session,watch_time_percentage, liked, positive_c
                 get_save_button(current_reel).click()
                 print("+ 1 💾")
 
+            uploader = get_profile_button(driver).text
             if visited_profile:
-                visit_profile(driver).click()
+                visit_profile(uploader).click()
                 print("Visited profile")
 
             neg_com_left = 0
@@ -187,6 +186,8 @@ def scrape(username,  password, session,watch_time_percentage, liked, positive_c
             if not_interested:
                 click_not_interested(driver)
                 print("Not interested")
+
+            caption = get_description(current_reel)
 
 
             # todo fix get_like_count and get_comment_count
@@ -215,7 +216,7 @@ def scrape(username,  password, session,watch_time_percentage, liked, positive_c
             data = [
                 [username, session, stripped_remove_instagram_com_url, like_count, comment_count, duration, watch_time,
                 watch_time_percentage, liked, pos_com_left, followed, shared, saved, visited_profile, neg_com_left,
-                not_interested, datetime]
+                not_interested, uploader, caption, datetime]
             ]
 
             with open('output.csv', 'a', newline='') as csvfile:
@@ -234,4 +235,17 @@ def scrape(username,  password, session,watch_time_percentage, liked, positive_c
     driver.quit()
 
 
-# todo
+# todo: fix get_like_button
+# todo: fix get_share_button
+# todo: fix get_profile_button
+# todo: fix get_follow_button
+# todo: fix get_description
+# todo: fix get_save_button
+
+# todo: fix get_like_count
+# todo: fix get_comment_count
+
+# todo: fix leave_comment
+# todo: fix visit_profile
+
+# todo: fix click_not_interested
