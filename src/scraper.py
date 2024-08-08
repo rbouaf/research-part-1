@@ -4,7 +4,7 @@ import time
 import csv
 
 import src.open_ig as open_reels
-import src.edge_driver as ed
+import src.driver_edge as ed
 
 driver = ed.driver
 

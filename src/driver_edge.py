@@ -19,8 +19,8 @@ from selenium.webdriver.common.proxy import Proxy, ProxyType
 # Set up Chrome options to use Mitmproxy
 edge_options = Options()
 # edge_options.add_argument('--proxy-server=http://127.0.0.1:8080')
-# chrome_options.add_argument('--headless')  # Enable headless mode
-# chrome_options.add_argument('--disable-gpu')  # Disable GPU acceleration
+# edge_options.add_argument('--headless')  # Enable headless mode
+# edge_options.add_argument('--disable-gpu')  # Disable GPU acceleration
 edge_options.add_argument('--no-sandbox')  # Bypass OS security model
 edge_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
 
