@@ -33,7 +33,7 @@ def scroll():
 
 
 # clicking on elements (harder than it seems)
-def click_like(current_reel):  #todo debug liking its glitchy sometimes
+def click_like(current_reel):
     # get like button
     like_button = current_reel.find_element(By.CSS_SELECTOR, '[aria-label="Like"]')
     like_button = like_button.find_element(By.XPATH, '.. /.. /.. /.. ')
@@ -87,25 +87,25 @@ def click_follow(current_reel):
     pass
 
 
-def click_not_interested(current_reel):  #todo redo from scratch its too inconsistent
+def click_not_interested(current_reel):
     pass
 
 
-def click_save(current_reel):  #todo debug save its glitchy sometimes
+def click_save(current_reel):
     pass
 
 
 # More complex behaviors
-def visit_profile(profile_button):  #todo redo from scratch its too inconsistent
+def visit_profile(profile_button):
     pass
 
 
-def leave_comment(current_reel, comment):  #todo debug comment its glitchy sometimes
+def leave_comment(current_reel, comment):
     comment_button = current_reel.find_element(By.CSS_SELECTOR, '[aria-label="Comment"]')
     comment_button.click()
 
 
-def share(current_reel):  #todo debug share its glitchy sometimes
+def share(current_reel):
     pass
 
 
