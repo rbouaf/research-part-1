@@ -2,22 +2,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
 
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.edge.service import Service as EdgeService
-from selenium.webdriver.edge.options import Options
-from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
-from seleniumwire import webdriver
-from seleniumwire.utils import decode as decodesw
-from bs4 import BeautifulSoup
-import re
-import json
-import os
-from urllib.parse import urlparse
-import csv
-from selenium import webdriver
-from selenium.webdriver.common.proxy import Proxy, ProxyType
-
-import src.driver_edge as edge_driver
+import lab_rat_scaper.driver_edge as edge_driver
 
 driver = edge_driver.driver
 wait5 = edge_driver.wait5

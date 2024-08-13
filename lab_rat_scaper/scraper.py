@@ -5,11 +5,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
 import csv
-from selenium.webdriver.support import expected_conditions as EC
 
-import src.open_ig as open_reels
-import src.driver_edge as ed
-
+import lab_rat_scaper.open_ig as open_reels
+import lab_rat_scaper.driver_edge as ed
+import lab_rat_scaper.conditions as conditions
 driver = ed.driver
 
 wait5 = ed.wait5
@@ -133,9 +132,9 @@ header = [
 ]
 
 
-def scrape(username, password, session, watch_time_percentage, like_everytime, leave_positive_comment_everytime,
-           followed_everytime, share_everytime, save_everytime, visit_profile_everytime,
-           leave_negative_comment_everytime, click_not_interested_everytime, quit_after):
+def scrape(username, password, session, watch_time_percentage, liked, pos_comment_left,
+           followed, shared, saved, profile_visited,
+           neg_comment_left, clicked_not_interested, quit_after, condition):
     def format_seconds(time):
         minutes = int(time // 60)
         remaining_seconds = int(time % 60)
@@ -144,9 +143,8 @@ def scrape(username, password, session, watch_time_percentage, like_everytime, l
 
     counter = 0
     global header
-    with open('output.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(header)
+    pcomlft = 0
+    ncomlft = 0
 
     time.sleep(1)
 
@@ -177,8 +175,6 @@ def scrape(username, password, session, watch_time_percentage, like_everytime, l
             if reel_data[-2] == 'Likes':
                 reel_data[-2] = -1
 
-
-
             url = driver.current_url
             stripped_remove_instagram_com_url = url.replace("https://www.instagram.com/", "")
 
@@ -186,51 +182,43 @@ def scrape(username, password, session, watch_time_percentage, like_everytime, l
             print("╭─────────────────────────────────────────────────────")
             print("│ " + driver.current_url + " • " + format_seconds(duration))
             print("│ ⬤ " + reel_data[0] + " • [Fᴏʟʟᴏᴡ]")
-
             wrapped_text = textwrap.fill(reel_data[1], 52)
             formatted_lines = [f"│ {line} " for line in wrapped_text.splitlines()]
             print('\n'.join(formatted_lines))
             print("│ ♥ " + str(reel_data[-2]) + " 🗨 " + str(reel_data[-1]) + " ▮" + " 🢅 ")
             print("╰─────────────────────────────────────────────────────")
 
-            if like_everytime:
-                click_like(current_reel)
-                print("+ 1 ❤️", end=" ")
-
-            if save_everytime:
-                click_save(current_reel)
-                print("+ 1 💾", end=" ")
-
-            if followed_everytime:
-                click_follow(current_reel)
-                print("+ 1 🤴", end=" ")
-
-            if click_not_interested_everytime:
-                click_not_interested(driver)
-                print("Not interested", end=" ")
-
-            if share_everytime:
-                share(current_reel)
-                print("+ 1 👨‍👦", end=" ")
-
-            if visit_profile_everytime:
-                visit_profile(current_reel)
-                print("Visited profile", end=" ")
-
-            pos_com_left = 0
-            if len(leave_positive_comment_everytime) > 1:
-                leave_comment(current_reel, leave_positive_comment_everytime)
-                pos_com_left = 1
-                print("+ 1 👍💬", end=" ")
-
-            neg_com_left = 0
-            if len(leave_negative_comment_everytime) > 1:
-                leave_comment(current_reel, leave_negative_comment_everytime)
-                neg_com_left = 1
-                print("+ 1 👎💬", end=" ")
+            # CONDITIONAL BEHAVIOR
+            if (condition == 1) or (condition == 2 and conditions.if_in_user_db(reel_data[0])):
+                if liked:
+                    click_like(current_reel)
+                    print("+ 1 ❤️", end=" ")
+                if saved:
+                    click_save(current_reel)
+                    print("+ 1 💾", end=" ")
+                if followed:
+                    click_follow(current_reel)
+                    print("+ 1 🤴", end=" ")
+                if clicked_not_interested:
+                    click_not_interested(driver)
+                    print("Not interested", end=" ")
+                if shared:
+                    share(current_reel)
+                    print("+ 1 👨‍👦", end=" ")
+                if profile_visited:
+                    visit_profile(current_reel)
+                    print("Visited profile", end=" ")
+                if len(pos_comment_left) > 1:
+                    leave_comment(current_reel, pos_comment_left)
+                    pcomlft = 1
+                    print("+ 1 👍💬", end=" ")
+                if len(neg_comment_left) > 1:
+                    leave_comment(current_reel, neg_comment_left)
+                    ncomlft = 1
+                    print("+ 1 👎💬", end=" ")
 
             watch_time = duration * watch_time_percentage
-            print(format_seconds(watch_time) + "/"+ format_seconds(duration)+" watched.")
+            print(format_seconds(watch_time) + "/" + format_seconds(duration) + " watched.")
 
             if watch_time < 1.6:
                 time.sleep(watch_time)
@@ -241,12 +229,12 @@ def scrape(username, password, session, watch_time_percentage, like_everytime, l
 
             data = [
                 [username, session, stripped_remove_instagram_com_url, reel_data[-2], reel_data[-1], duration,
-                 watch_time, watch_time_percentage, like_everytime, pos_com_left, followed_everytime, share_everytime,
-                 save_everytime, visit_profile_everytime, neg_com_left,
-                 click_not_interested_everytime, reel_data[0], reel_data[1], datetime]
+                 watch_time, watch_time_percentage, liked, pcomlft, followed, shared,
+                 saved, profile_visited, ncomlft,
+                 clicked_not_interested, reel_data[0], reel_data[1], datetime]
             ]
 
-            with open('output.csv', 'a', newline='', encoding='utf-8') as csvfile:
+            with open('data_output/data_output.csv', 'a', newline='', encoding='utf-8') as csvfile:
                 csv.writer(csvfile).writerows(data)
 
             scroll()

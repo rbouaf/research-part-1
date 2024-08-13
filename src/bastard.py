@@ -12,7 +12,7 @@ import random
 
 from selenium.webdriver.common.action_chains import ActionChains
 
-from data.keys.credentials import aws_access_key_id, aws_secret_access_key
+from data_input.keys.credentials import aws_access_key_id, aws_secret_access_key
 
 from src.download import download_image
 from src.aws import upload_to_s3
@@ -67,7 +67,7 @@ for i in range(5):
         time.sleep(2)  # Wait before retrying
 
 def upload_file(number):
-    upload_to_s3(f'data/screenshots/{global_counter}sc{localcounter}-{number}.png', 
+    upload_to_s3(f'data_input/screenshots/{global_counter}sc{localcounter}-{number}.png',
                  'socialcomputing', 
                  f'ig_reels/{global_counter}sc{localcounter}-{number}.png', 
                  aws_access_key_id, 
@@ -99,19 +99,19 @@ while True:
         png = driver.get_screenshot_as_png()
         im = Image.open(BytesIO(png))
         im = im.crop((left, top, right, bottom))
-        im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-2.png')
+        im.save('data_input/screenshots/'+f'{global_counter}sc{localcounter}-2.png')
 
         # get t+1 screenshot
         time.sleep(0.5)
         png = driver.get_screenshot_as_png()
         im = Image.open(BytesIO(png))
         im = im.crop((left, top, right, bottom))
-        im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-3.png')
+        im.save('data_input/screenshots/'+f'{global_counter}sc{localcounter}-3.png')
         
         # get thumnail and download
         current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
         link = current_thumbnail.get_attribute('src')
-        download_image(link, 'data/screenshots/', f'{global_counter}sc{localcounter}-1.png')
+        download_image(link, 'data_input/screenshots/', f'{global_counter}sc{localcounter}-1.png')
 
         numbers = [1, 2, 3]
         thumbnails = [f'https://socialcomputing.s3.amazonaws.com/ig_reels/{global_counter}sc{localcounter}-{number}.png' for number in numbers]

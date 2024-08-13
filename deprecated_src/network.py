@@ -51,7 +51,7 @@ def main():
         #         print(url)
         print(url)
 
-    with open("../data/requests/data.json", "w") as file:
+    with open("../data_output/requests/data.json", "w") as file:
         json.dump(resps, file)
 
     driver.close()
