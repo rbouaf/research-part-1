@@ -32,34 +32,28 @@ def scroll():
     body.send_keys(Keys.ARROW_DOWN)
 
 
-def click(element):
+def brute_force_click(element):
     size = element.size
-    print(str(size))
-    location = element.location
-    print(str(location))
-    x_center = location['x'] + size['width'] / 2
-    y_center = location['y'] + size['height'] / 2
-    click_script = """
-    var evt = new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX: arguments[0],
-        clientY: arguments[1]
-    });
-    document.dispatchEvent(evt);
-    """
-    print(str(x_center)+", "+str(y_center))
-    driver.execute_script(click_script, x_center, y_center)
-
+    actions = ActionChains(driver)
+    actions.move_to_element_with_offset(element, size['width'] / 2, size['height'] / 2).click().perform()
 
 def get_like(current_reel):
     like_button = current_reel.find_element(By.CSS_SELECTOR, '[aria-label="Like"]')
     like_button = like_button.find_element(By.XPATH, '.. /.. /.. /.. ')
-
     return like_button
 
-# clicking on elements (harder than it seems)
+def get_follow(current_reel):
+    divs = current_reel.find_elements(By.TAG_NAME, 'div')
+    follow = None
+    for d in divs:
+        print(str(d.text))
+        if d.text.strip() == "Follow":
+            follow = d
+            break
+    print(str(follow.text))
+    return follow
+
+
 def click_like(current_reel):
     # get like button
     like_button = current_reel.find_element(By.CSS_SELECTOR, '[aria-label="Like"]')
@@ -218,13 +212,13 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
             # CONDITIONAL BEHAVIOR
             if (condition == 1) or (condition == 2 and conditions.if_in_user_db(reel_data[0])):
                 if liked:
-                    click(get_like(current_reel))
+                    brute_force_click(get_like(current_reel))
                     print("+ 1 ❤️", end=" ")
                 if saved:
                     click_save(current_reel)
                     print("+ 1 💾", end=" ")
                 if followed:
-                    click_follow(current_reel)
+                    brute_force_click(get_follow(current_reel))
                     print("+ 1 🤴", end=" ")
                 if clicked_not_interested:
                     click_not_interested(driver)
