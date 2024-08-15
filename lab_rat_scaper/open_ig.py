@@ -2,7 +2,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
 
-import lab_rat_scaper.driver_edge as edge_driver
+import drivers.driver_edge as edge_driver
 
 driver = edge_driver.driver
 wait5 = edge_driver.wait5

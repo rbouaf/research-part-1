@@ -7,7 +7,7 @@ import time
 import csv
 
 import lab_rat_scaper.open_ig as open_reels
-import lab_rat_scaper.driver_edge as ed
+import drivers.driver_edge as ed
 import lab_rat_scaper.conditions as conditions
 driver = ed.driver
 
