@@ -7,14 +7,14 @@ import time
 import csv
 
 import lab_rat_scaper.open_ig as open_reels
-import drivers.driver_edge as ed
+import drivers.driver_chrome as cdriver
 import lab_rat_scaper.conditions as conditions
 
-driver = ed.driver
+driver = cdriver.driver
 
-wait5 = ed.wait5
-wait10 = ed.wait10
-wait2 = ed.wait2
+wait5 = cdriver.wait5
+wait10 = cdriver.wait10
+wait2 = cdriver.wait2
 
 actions = ActionChains(driver)
 
