@@ -1,5 +1,5 @@
 import textwrap
-
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -9,11 +9,14 @@ import csv
 import lab_rat_scaper.open_ig as open_reels
 import drivers.driver_edge as ed
 import lab_rat_scaper.conditions as conditions
+
 driver = ed.driver
 
 wait5 = ed.wait5
 wait10 = ed.wait10
 wait2 = ed.wait2
+
+actions = ActionChains(driver)
 
 
 # bug fixed, when search by style, you have to use style*="value" instead of style="value" for contains() search
@@ -34,25 +37,28 @@ def scroll():
 
 def brute_force_click(element):
     size = element.size
-    actions = ActionChains(driver)
+    location = element.location
+
+    x_center = location['x'] + size['width'] / 2
+    y_center = location['y'] + size['height'] / 2
+    print(element.text + "(" + str(x_center) + "," + str(y_center) + ")")
     actions.move_to_element_with_offset(element, size['width'] / 2, size['height'] / 2).click().perform()
+
 
 def get_like(current_reel):
     like_button = current_reel.find_element(By.CSS_SELECTOR, '[aria-label="Like"]')
     like_button = like_button.find_element(By.XPATH, '.. /.. /.. /.. ')
+    print("like", end=" ")
     return like_button
 
-def get_follow(current_reel):
-    divs = current_reel.find_elements(By.TAG_NAME, 'div')
-    follow = None
-    for d in divs:
-        print(str(d.text))
-        if d.text.strip() == "Follow":
-            follow = d
-            break
-    print(str(follow.text))
-    return follow
 
+def save_post(current_reel):
+    save_button = current_reel.find_element(By.CSS_SELECTOR, 'svg[aria-label="Save"]')
+    save_button.click()
+def get_follow(current_reel):
+    follow_button = current_reel.find_element(By.XPATH, "//div[text()='Follow']")
+    print(follow_button.text, follow_button.get_attribute('outerHTML'))
+    return follow_button
 
 def click_like(current_reel):
     # get like button
@@ -122,8 +128,13 @@ def visit_profile(profile_button):
 
 
 def leave_comment(current_reel, comment):
-    comment_button = current_reel.find_element(By.CSS_SELECTOR, '[aria-label="Comment"]')
+    comment_button = current_reel.find_element(By.CSS_SELECTOR, 'svg[aria-label="Comment"]')
     comment_button.click()
+    textbox = wait10.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Add a comment…']")))
+    textbox = wait10.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Add a comment…']")))
+    textbox.click()
+    driver.switch_to.active_element.send_keys(comment)
+    driver.switch_to.active_element.send_keys(Keys.ENTER)
 
 
 def share(current_reel):
@@ -163,7 +174,6 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
         return formatted_time
 
     counter = 0
-    global header
     pcomlft = 0
     ncomlft = 0
 
@@ -171,9 +181,7 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
 
     open_reels.open_reels(username, password)
 
-    actions = ActionChains(driver)
     actions.move_by_offset(100, 100).click().perform()
-
     while counter <= quit_after:
         try:
             time.sleep(1)
@@ -188,6 +196,10 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
             ######## trimming process ######
             seen = set()
             reel_data = [x for x in reel_info if not (x in seen or seen.add(x))]
+            expand_caption = False
+            if '… more' in reel_data:
+                expand_caption = True
+
             for e in reel_data:
                 # this is not elegant but more readable.
                 if e == '' or e == ' ' or e == '\n' or e == '•' or e == '•' or e == '… more' or e == 'Like':
@@ -196,10 +208,14 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
             if reel_data[-2] == 'Likes':
                 reel_data[-2] = -1
 
+
+
+
             url = driver.current_url
             stripped_remove_instagram_com_url = url.replace("https://www.instagram.com/", "")
-
             duration = get_reel_duration(current_reel)
+
+            # PRINT ###################################################################################################
             print("╭─────────────────────────────────────────────────────")
             print("│ " + driver.current_url + " • " + format_seconds(duration))
             print("│ ⬤ " + reel_data[0] + " • [Fᴏʟʟᴏᴡ]")
@@ -208,6 +224,8 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
             print('\n'.join(formatted_lines))
             print("│ ♥ " + str(reel_data[-2]) + " 🗨 " + str(reel_data[-1]) + " ▮" + " 🢅 ")
             print("╰─────────────────────────────────────────────────────")
+            ###########################################################################################################
+
 
             # CONDITIONAL BEHAVIOR
             if (condition == 1) or (condition == 2 and conditions.if_in_user_db(reel_data[0])):
@@ -215,7 +233,7 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
                     brute_force_click(get_like(current_reel))
                     print("+ 1 ❤️", end=" ")
                 if saved:
-                    click_save(current_reel)
+                    save_post(current_reel)
                     print("+ 1 💾", end=" ")
                 if followed:
                     brute_force_click(get_follow(current_reel))
@@ -232,10 +250,13 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
                 if len(pos_comment_left) > 1:
                     leave_comment(current_reel, pos_comment_left)
                     pcomlft = 1
+                    actions.move_by_offset(100, 100).click().perform()
                     print("+ 1 👍💬", end=" ")
                 if len(neg_comment_left) > 1:
                     leave_comment(current_reel, neg_comment_left)
                     ncomlft = 1
+                    actions.move_by_offset(100, 100).click().perform()
+
                     print("+ 1 👎💬", end=" ")
 
             watch_time = duration * watch_time_percentage

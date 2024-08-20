@@ -49,8 +49,10 @@ def open_reels(username, password):
             time.sleep(2)
 
     # click on not now button 2
-    Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,
-                                                              '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
+    # Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,
+    #                                                           '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
+    time.sleep(1)
+    Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
     Not_Now_button.click()
     print("[Not Now]")
 
