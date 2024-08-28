@@ -51,21 +51,18 @@ password.send_keys("marco1231$")  # password
 button = WebDriverWait(driver, 2).until(
     EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))).click()  # clicking submit button
 
-def click_not_now_button(driver, retries=5):
-    for i in range(retries):
+def click_not_now_button(driver):
+    for i in range(5):
         try:
-            # Wait for the "Not Now" button to be clickable
-            not_now_button = wait10.until(
-                EC.element_to_be_clickable((By.XPATH,
-                    '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div/div/div/div'))
-            )
-            # Click the "Not Now" button using JavaScript
-            driver.execute_script("arguments[0].click();", not_now_button)
-            print("Clicked 'not now' button")
+            element_text = "Not now"
+            not_now_button = wait10.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{element_text}']")))
+
+            not_now_button.click()
+            print("[Not now]")
             break
         except Exception as e:
             print(f"Attempt {i + 1} failed: {e}")
-            time.sleep(2)  # Wait before retrying
+            time.sleep(2)
 click_not_now_button(driver)
 
 def upload_file(number):
@@ -91,45 +88,46 @@ reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
 localcounter = 0
 while True:
     try:
-        # Initialize a list to hold file paths and S3 keys, clear it out every iteration
-        localcounter+=1
-        numbers = []
-        thumbnails = []
         
-        # get t+0.5 screenshot
-        time.sleep(0.5)
-        png = driver.get_screenshot_as_png()
-        im = Image.open(BytesIO(png))
-        im = im.crop((left, top, right, bottom))
-        im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-2.png')
-
-        # get t+1 screenshot
-        time.sleep(0.5)
-        png = driver.get_screenshot_as_png()
-        im = Image.open(BytesIO(png))
-        im = im.crop((left, top, right, bottom))
-        im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-3.png')
+        # # Initialize a list to hold file paths and S3 keys, clear it out every iteration
+        # localcounter+=1
+        # numbers = []
+        # thumbnails = []
         
-        # get thumnail and download
-        current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
-        link = current_thumbnail.get_attribute('src')
-        download_image(link, 'data/screenshots/', f'{global_counter}sc{localcounter}-1.png')
+        # # get t+0.5 screenshot
+        # time.sleep(0.5)
+        # png = driver.get_screenshot_as_png()
+        # im = Image.open(BytesIO(png))
+        # im = im.crop((left, top, right, bottom))
+        # im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-2.png')
 
-        numbers = [1, 2, 3]
-        thumbnails = [f'https://socialcomputing.s3.amazonaws.com/ig_reels/{global_counter}sc{localcounter}-{number}.png' for number in numbers]
-        print (thumbnails)
-
-        with ThreadPoolExecutor(max_workers=3) as executor:
-            futures = [executor.submit(upload_file, number) for number in numbers]
+        # # get t+1 screenshot
+        # time.sleep(0.5)
+        # png = driver.get_screenshot_as_png()
+        # im = Image.open(BytesIO(png))
+        # im = im.crop((left, top, right, bottom))
+        # im.save('data/screenshots/'+f'{global_counter}sc{localcounter}-3.png')
         
-        # Categorize the images using OpenAI's GPT-4o model, checks for errors, and prints
-        categorize_images(thumbnails)
-        # we have now enabled the classification of the images in real time
-        # and we'll be able to take actions based on this classification, such as a 'like'
+        # # get thumnail and download
+        # current_thumbnail = driver.find_element(By.CSS_SELECTOR, 'img[class="xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj xuzhngd"]')
+        # link = current_thumbnail.get_attribute('src')
+        # download_image(link, 'data/screenshots/', f'{global_counter}sc{localcounter}-1.png')
 
-        # all that's left is to implement these functions based on the classification
-        # first we'll make the function before implementing a simple 'if then' to use them
+        # numbers = [1, 2, 3]
+        # thumbnails = [f'https://socialcomputing.s3.amazonaws.com/ig_reels/{global_counter}sc{localcounter}-{number}.png' for number in numbers]
+        # print (thumbnails)
+
+        # with ThreadPoolExecutor(max_workers=3) as executor:
+        #     futures = [executor.submit(upload_file, number) for number in numbers]
         
+        # # Categorize the images using OpenAI's GPT-4o model, checks for errors, and prints
+        # categorize_images(thumbnails)
+        # # we have now enabled the classification of the images in real time
+        # # and we'll be able to take actions based on this classification, such as a 'like'
+
+        # # all that's left is to implement these functions based on the classification
+        # # first we'll make the function before implementing a simple 'if then' to use them
+        # **/
         # get current reel for our functions to act on
         current_reel = driver.find_element(By.CLASS_NAME, 'xuzhngd')
         print("got current reel")
@@ -137,31 +135,31 @@ while True:
         parent_div = current_reel.find_element(By.XPATH, '.. /.. /..')
         print("got parent div")
 
-        def like_post():
-            try:
-                # Wait for the SVG element with aria-label="Like" to be present
-                like_button = WebDriverWait(parent_div, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, 'svg[aria-label="Like"]'))
-                )
-                print("Got like button")
+        # def like_post():
+        #     try:
+        #         # Wait for the SVG element with aria-label="Like" to be present
+        #         like_button = WebDriverWait(parent_div, 10).until(
+        #             EC.presence_of_element_located((By.CSS_SELECTOR, 'svg[aria-label="Like"]'))
+        #         )
+        #         print("Got like button")
 
-                # Scroll into view
-                driver.execute_script("arguments[0].scrollIntoView(true);", like_button)
+        #         # Scroll into view
+        #         driver.execute_script("arguments[0].scrollIntoView(true);", like_button)
 
-                # Wait for the element to be clickable
-                like_button = WebDriverWait(parent_div, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, 'svg[aria-label="Like"]'))
-                )
+        #         # Wait for the element to be clickable
+        #         like_button = WebDriverWait(parent_div, 10).until(
+        #             EC.element_to_be_clickable((By.CSS_SELECTOR, 'svg[aria-label="Like"]'))
+        #         )
 
-                # Check if the element is still in a valid state
-                if like_button.is_displayed() and like_button.is_enabled():
-                    # Use JavaScript to click the element
-                    driver.execute_script("arguments[0].click();", like_button)
-                    print("Liked the reel")
-                else:
-                    print("Element is obscured or not clickable")
-            except Exception as e:
-                print(f"An error occurred: {e}")
+        #         # Check if the element is still in a valid state
+        #         if like_button.is_displayed() and like_button.is_enabled():
+        #             # Use JavaScript to click the element
+        #             driver.execute_script("arguments[0].click();", like_button)
+        #             print("Liked the reel")
+        #         else:
+        #             print("Element is obscured or not clickable")
+        #     except Exception as e:
+        #         print(f"An error occurred: {e}")
         
         def save_post():
             save_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Save"]')
@@ -204,8 +202,8 @@ while True:
 
         # Like, save, follow, and comment on the reel
         
-        like_post() # doesnt work
-        time.sleep(5)
+        # like_post() # doesnt work
+        # time.sleep(5)
         save_post()
         time.sleep(5)
         follow_user()
