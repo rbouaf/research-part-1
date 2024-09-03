@@ -26,11 +26,6 @@ chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resou
 
 driver = webdriver.Chrome(options=chrome_options)
 
-
-def custom_driver(custom_options):
-    return webdriver.Chrome(options=custom_options)
-
-
 # wait variables
 wait5 = WebDriverWait(driver, 5)
 wait10 = WebDriverWait(driver, 10)

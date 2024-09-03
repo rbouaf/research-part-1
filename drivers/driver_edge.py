@@ -15,7 +15,6 @@ from urllib.parse import urlparse
 import csv
 from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
-716,520
 # Set up Chrome options to use Mitmproxy
 edge_options = Options()
 # edge_options.add_argument('--proxy-server=http://127.0.0.1:8080')
@@ -26,8 +25,6 @@ edge_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resourc
 # edge_options.add_extension('C:\\Users\\Admin\\Programs\\PycharmProjects\\comp396\\drivers\\xy_extension.crx')
 driver = webdriver.Edge(options=edge_options)
 
-def custom_driver(custom_options):
-    return webdriver.Edge(options=custom_options)
 
 # wait variables
 wait5 = WebDriverWait(driver, 5)

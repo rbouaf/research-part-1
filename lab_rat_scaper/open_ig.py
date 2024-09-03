@@ -2,12 +2,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
 
-import drivers.driver_edge as edge_driver
+import drivers.driver_chrome as driver_chrome
 
-driver = edge_driver.driver
-wait5 = edge_driver.wait5
-wait10 = edge_driver.wait10
-wait2 = edge_driver.wait2
+driver = driver_chrome.driver
+wait5 = driver_chrome.wait5
+wait10 = driver_chrome.wait10
+wait2 = driver_chrome.wait2
 
 
 def open_reels(username, password):

@@ -9,7 +9,7 @@ scraper.scrape("michealjoneshenny",
                1,
                0.3,
                1,
-               "Great comment so delicious!",
+               "Great content so delicious!",
                0,
                0,
                1,
@@ -23,4 +23,3 @@ scraper.scrape("michealjoneshenny",
 # session_counter += 1
 
 
-#todo follow
