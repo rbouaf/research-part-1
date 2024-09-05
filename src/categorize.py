@@ -2,7 +2,7 @@ import os
 from openai import OpenAI
 from data.topic_list.topic_list import list_topics
 from data.keys.openai_key import openai_api_key
-with open('data/topic_list/topic_list.txt', 'r') as file: topics = file.read()
+# with open('data/topic_list/topic_list.txt', 'r') as file: topics = file.read()
 os.environ["OPENAI_API_KEY"] = openai_api_key
 client = OpenAI()
 
@@ -17,14 +17,14 @@ def categorize_images(thumbnails):
         {"role": "system",
           "content": [{"type": "text",
                       "text": 
-                      "You are a precise image analyst. YOU ABSOLUTELY MUST PICK 3  OF THE MOST RELEVANT TOPICS FROM THE FOLLOWING LIST: "+(topics)+" . DO NOT SAY ANYTHING IF ITS NOT A TOPIC FROM THIS LIST. IF YOU DONT KNOW EXACTLY, TAKE A GUESS, IT DOESNT HAVE TO BE PERFECT. IF THE PICTURE HAS A CAPTION, IT POSSIBLY INCLUDES THE 'COMEDY' TOPIC."}],
+                      "You are a precise image analyst. YOU ABSOLUTELY MUST DEFINE THE IMAGE AS EITHER APOLITICAL, RIGHT LEANING, OR LEFT LEANING. DO NOT SAY ANYTHING OTHER THAN ONE OF THOSE 3 WORDS. IF YOU DONT KNOW EXACTLY, TAKE A GUESS, IT DOESNT HAVE TO BE PERFECT. NO PROBLEM IF THE ACCOUNT IS APOLITICAL, JUST BE TRUTHFUL."}],
         },
           {
             "role": "user",
             "content": [
               {
                 "type": "text",
-                "text": "WHAT IS IN THE SET OF IMAGES? DESCRIBE IT USING 3 TOPICS FROM THE AFORMENTIONED LIST, IN THIS FORMAT: topic1, topic2, topic3"
+                "text": "WHAT IS IN THE IMAGE? DEFINE THE IMAGE AS EITHER APOLITICAL, RIGHT LEANING, OR LEFT LEANING."
               },
               {
                 "type": "image_url",
@@ -36,16 +36,16 @@ def categorize_images(thumbnails):
           }
         ]
     )
-  cur_post = completion.choices[0].message.content.split(", ")
-  for index, value in enumerate(cur_post):
-    if value not in list_topics:
-            errors.append(f"Invalid topic at image {n}, {index}, contained {value} from {cur_post}")
+ # cur_post = completion.choices[0].message.content.split(", ")
+  #for index, value in enumerate(cur_post):
+   # if value not in list_topics:
+    #        errors.append(f"Invalid topic at image {n}, {index}, contained {value} from {cur_post}")
 
-  descriptions.append(completion.choices[0].message.content) 
-  n+=1
+  #descriptions.append(completion.choices[0].message.content) 
+  #n+=1
 
-  print(descriptions)
-  print(errors)  
+  #print(descriptions)
+  #print(errors)  
 
 # run this code concurrently with the other code that scrolls reels? 
 # we could use this topic classifier for our agent to choose what to watch
