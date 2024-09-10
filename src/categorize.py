@@ -17,14 +17,14 @@ def categorize_images(thumbnails):
         {"role": "system",
           "content": [{"type": "text",
                       "text": 
-                      "You are a precise image analyst. YOU ABSOLUTELY MUST DEFINE THE IMAGE AS EITHER APOLITICAL, RIGHT LEANING, OR LEFT LEANING. DO NOT SAY ANYTHING OTHER THAN ONE OF THOSE 3 WORDS. IF YOU DONT KNOW EXACTLY, TAKE A GUESS, IT DOESNT HAVE TO BE PERFECT. NO PROBLEM IF THE ACCOUNT IS APOLITICAL, JUST BE TRUTHFUL."}],
+                      "You are a precise image analyst. YOU ABSOLUTELY MUST DEFINE THE IMAGE AS EITHER APOLITICAL, RIGHT LEANING, OR LEFT LEANING. USE ONLY THE WORDS APOLITICAL, RIGHT, OR LEFT. DO NOT SAY ANYTHING OTHER THAN ONE OF THOSE 3 WORDS. IF YOU DONT KNOW EXACTLY, TAKE A GUESS, IT DOESNT HAVE TO BE PERFECT. NO PROBLEM IF THE ACCOUNT IS APOLITICAL, JUST BE TRUTHFUL."}],
         },
           {
             "role": "user",
             "content": [
               {
                 "type": "text",
-                "text": "WHAT IS IN THE IMAGE? DEFINE THE IMAGE AS EITHER APOLITICAL, RIGHT LEANING, OR LEFT LEANING."
+                "text": "WHAT IS IN THE IMAGE? DEFINE THE IMAGE AS EITHER APOLITICAL, RIGHT LEANING, OR LEFT LEANING. USE ONLY THE WORDS 'APOLITICAL', 'RIGHT', OR 'LEFT'."
               },
               {
                 "type": "image_url",
@@ -41,10 +41,10 @@ def categorize_images(thumbnails):
    # if value not in list_topics:
     #        errors.append(f"Invalid topic at image {n}, {index}, contained {value} from {cur_post}")
 
-  #descriptions.append(completion.choices[0].message.content) 
+  descriptions.append(completion.choices[0].message.content) 
   #n+=1
-
-  #print(descriptions)
+  return descriptions
+  print(descriptions)
   #print(errors)  
 
 # run this code concurrently with the other code that scrolls reels? 

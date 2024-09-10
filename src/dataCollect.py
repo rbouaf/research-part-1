@@ -87,6 +87,7 @@ left_profile_list = []
 right_profile_list = []
 leftover_errorcheck = []
 profile_button = None
+profile_name = None
 
 #document.querySelector('.xuzhngd').parentElement.parentElement.parentElement.parentElement.querySelector('img[alt*="profile picture" i]')
 # in essence we already have the username, but parsing the result from the above selector would be easy too. 
@@ -114,6 +115,13 @@ while True:
         parent_div = current_reel.find_element(By.XPATH, '.. /.. /..')
         print("got parent div")
         
+        # Move to the next reel by simulating a down arrow key press
+        time.sleep(0.5)
+        print("Scrolling down "+str(localcounter))
+        reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
+        reels.send_keys(Keys.ARROW_DOWN)
+        
+
         clicknsave_profile()
 
         # get screenshot
@@ -131,25 +139,22 @@ while True:
         upload_file()
 
         # Categorize the images using OpenAI's GPT-4o model, checks for errors, and prints
-        categorize_images(thumbnails)
-
+        print(categorize_images(thumbnails))
+        result = categorize_images(thumbnails)
         # I will then, depending on what the categorize function returns, either save the username, or not
-        # if returnfrom_categorize_images is == left,
-            # left_profile_list =+ profile_name
-            # elif returnfrom_categorize_images is == right,
-                # right_profile_list =+ profile_name
-                    # else leftover_errorcheck =+ profile_name
+        if result == 'LEFT':
+            left_profile_list += profile_name
+            if result == 'RIGHT':
+                right_profile_list += profile_name
+            else : leftover_errorcheck += profile_name
 
+        print(len(left_profile_list))
+        print(len(right_profile_list))
+        print(len(leftover_errorcheck))
         # then, I'll return to the reels page
         driver.get('https://www.instagram.com/reels/')
         print("Went back to Reels")
 
-        # Move to the next reel by simulating a down arrow key press
-        time.sleep(0.5)
-        print("Scrolling down "+str(localcounter))
-        reels = driver.find_element(By.CSS_SELECTOR, 'div[tabindex="0"]')
-        reels.send_keys(Keys.ARROW_DOWN)
-        # works great but naming convention is weird on AWS 1 10 2 .. 8 9 is the order. so 001 file names may be better 
         
 
     except Exception as e:
@@ -159,3 +164,5 @@ while True:
     # current video (the active one)
     # xz74otr x1bs05mj x5yr21d x10l6tqk x1d8287x x19991ni xwzpupj // xuzhngd // 
     # this is the id of our active video which we can use to get attributes
+
+    # future reference: AWS works great but naming convention is weird on AWS 1 10 2 .. 8 9 is the order. so 001 file names may be better 
