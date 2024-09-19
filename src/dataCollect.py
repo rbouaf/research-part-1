@@ -59,6 +59,7 @@ def click_not_now_button(driver):
         except Exception as e:
             print(f"Attempt {i + 1} failed: {e}")
             time.sleep(2)
+
 click_not_now_button(driver)
 
 def upload_file():
