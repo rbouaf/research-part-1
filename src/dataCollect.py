@@ -1,3 +1,6 @@
+# make sure to run with  python -m src.dataCollect
+# current issue: very small % of reels recommended are political. LLM is accurate, but it would take forever if only 1/30 are poli
+
 # Import dependencies
 from selenium import webdriver
 from PIL import Image
