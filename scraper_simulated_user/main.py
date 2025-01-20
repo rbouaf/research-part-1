@@ -1,4 +1,4 @@
-import lab_rat_scaper.scraper as scraper
+import scraper_simulated_user.doomscroller as scraper
 
 # # open session_counter.txt and read the number of sessions
 # with open("session_counter.txt", "r") as f:
@@ -8,8 +8,8 @@ scraper.scrape("michealjoneshenny",
                "benis1234",
                1,
                0.3,
-               1,
-               "Great content so delicious!",
+               0,
+               "",
                0,
                0,
                1,

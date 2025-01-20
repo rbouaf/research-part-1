@@ -1,7 +1,10 @@
 import os
 from openai import OpenAI
+
+#internal imports
 from data_input.topic_list.topic_list import list_topics
 from data_input.keys.openai_key import openai_api_key
+
 with open('../data_input/topic_list/topic_list.txt', 'r') as file: topics = file.read()
 os.environ["OPENAI_API_KEY"] = openai_api_key
 client = OpenAI()

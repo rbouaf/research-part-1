@@ -27,35 +27,35 @@ def open_reels(username, password):
     for p in range(0, len(username)):
         print("*", end="")
     print("⎦")
-
     # submit
     wait2.until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))).click()
     print("╭──────╮")
     print("│SUBMIT│")
     print("╰──────╯")
-
-    # click on not now button 1
-    for i in range(5):
-        try:
-            element_text = "Not now"
-            not_now_button = wait10.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{element_text}']")))
-
-            not_now_button.click()
-            print("[Not now]")
-            break
-        except Exception as e:
-            print(f"Attempt {i + 1} failed: {e}")
-            time.sleep(2)
-
-    # click on not now button 2
-    # Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,
-    #                                                           '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
-    time.sleep(1)
-    Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
-    Not_Now_button.click()
-    print("[Not Now]")
+    #
+    # # click on not now button 1
+    # for i in range(5):
+    #     try:
+    #         element_text = "Not now"
+    #         not_now_button = wait10.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{element_text}']")))
+    #
+    #         not_now_button.click()
+    #         print("[Not now]")
+    #         break
+    #     except Exception as e:
+    #         print(f"Attempt {i + 1} failed: {e}")
+    #         time.sleep(2)
+    #
+    # # click on not now button 2
+    # # Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,
+    # #                                                           '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
+    # time.sleep(1)
+    # Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
+    # Not_Now_button.click()
+    # print("[Not Now]")
 
     # open reels
+    time.sleep(6)
     driver.get('https://www.instagram.com/reels/')
     print('⎣ www.instagram.com/reels/ ⎦')
