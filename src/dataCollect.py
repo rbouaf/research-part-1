@@ -28,7 +28,7 @@ right = 1560
 bottom = 1125   
 
 # Initialize the WebDriver
-driver = webdriver.Chrome(service=Service(r'C:/Users/born2die/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe'))
+driver = webdriver.Chrome()
 
 # wait variables
 wait5 = WebDriverWait(driver, 5)
@@ -60,7 +60,7 @@ def click_not_now_button(driver):
             print(f"Attempt {i + 1} failed: {e}")
             time.sleep(2)
 
-click_not_now_button(driver)
+#click_not_now_button(driver)
 
 def upload_file():
     upload_to_s3(f'data/screenshots/{global_counter}sc{localcounter}-new.png', 
@@ -68,12 +68,15 @@ def upload_file():
                  f'ig_reels/{global_counter}sc{localcounter}-new.png', 
                  aws_access_key_id, 
                  aws_secret_access_key)
-
+'''
 Not_Now_button = wait10.until(
     EC.element_to_be_clickable((By.CLASS_NAME, '_a9_1'))
 )
 Not_Now_button.click()
 print("Clicked 'Not Now'")
+'''
+
+time.sleep(5)
 
 # this method works too
 driver.get('https://www.instagram.com/reels/')
