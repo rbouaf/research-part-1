@@ -3,18 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
-import time
-from seleniumwire import webdriver
-from seleniumwire.utils import decode as decodesw
-from bs4 import BeautifulSoup
-import re
-import json
-import os
-from urllib.parse import urlparse
-import csv
+
 from selenium import webdriver
-from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 # Set up Chrome options to use Mitmproxy
 chrome_options = Options()
