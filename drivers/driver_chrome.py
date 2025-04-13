@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 
 from selenium import webdriver
 
@@ -13,8 +14,8 @@ chrome_options = Options()
 # chrome_options.add_argument('--disable-gpu')  # Disable GPU acceleration
 chrome_options.add_argument('--no-sandbox')  # Bypass OS security model
 chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
+driver = webdriver.Chrome(service=Service(r'C:\Users\User\Developments\PycharmProjects\comp396\chromedriver.exe'))
 
-driver = webdriver.Chrome(options=chrome_options)
 
 # wait variables
 wait5 = WebDriverWait(driver, 5)
