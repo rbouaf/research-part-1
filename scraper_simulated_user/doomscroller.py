@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
 import csv
+
 import scraper_simulated_user.open_ig as open_reels
 import drivers.driver_chrome as cdriver
 import scraper_simulated_user.conditions as conditions
@@ -17,9 +18,7 @@ wait2 = cdriver.wait2
 
 actions = ActionChains(driver)
 
-
 # bug fixed, when search by style, you have to use style*="value" instead of style="value" for contains() search
-
 
 # Important functions
 def get_current_reel(driver):
@@ -113,30 +112,87 @@ def click_follow(current_reel):
     pass
 
 
-def click_not_interested(current_reel):
+def click_not_interested(current_reel):  #
+    # divs = current_reel.find_elements(By.TAG_NAME, 'div')
+    # follow = None
+    # for d in divs:
+    #     if d.text.strip() == "Follow":
+    #         follow = d
+    #         break
+    #
+    # if follow:
+    #     while True:
+    #         print(follow.text.strip() + " - not following yet")
+    #         driver.execute_script("arguments[0].focus(); arguments[0].click();", follow)
+    #         time.sleep(1)
+    #         if follow.text == "Following":
+    #             break
+    #
+    # else:
+    #     print('Element not found')
+    #     return None
     pass
 
 
-def click_save(current_reel):
-    pass
+def click_save():
+    current_reel = driver.find_element(By.CLASS_NAME, 'xuzhngd')
+    parent_div = current_reel.find_element(By.XPATH, '.. /.. /..')
+
+    save_button = parent_div.find_element(By.CSS_SELECTOR, 'svg[aria-label="Save"]')
+    save_button.click()
+
 
 
 # More complex behaviors
 def visit_profile(profile_button):
+    # divs = current_reel.find_elements(By.TAG_NAME, 'div')
+    # follow = None
+    # for d in divs:
+    #     if d.text.strip() == "Follow":
+    #         follow = d
+    #         break
+    #
+    # if follow:
+    #     while True:
+    #         print(follow.text.strip() + " - not following yet")
+    #         driver.execute_script("arguments[0].focus(); arguments[0].click();", follow)
+    #         time.sleep(1)
+    #         if follow.text == "Following":
+    #             break
+    #
+    # else:
+    #     print('Element not found')
+    #     return None
     pass
 
 
 def leave_comment(current_reel, comment):
     comment_button = current_reel.find_element(By.CSS_SELECTOR, 'svg[aria-label="Comment"]')
     comment_button.click()
-    textbox = wait10.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Add a comment…']")))
     textbox = wait10.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Add a comment…']")))
     textbox.click()
     driver.switch_to.active_element.send_keys(comment)
     driver.switch_to.active_element.send_keys(Keys.ENTER)
 
-
-def share(current_reel):
+def share(current_reel):  # debug share its glitchy sometimes
+    # divs = current_reel.find_elements(By.TAG_NAME, 'div')
+    # follow = None
+    # for d in divs:
+    #     if d.text.strip() == "Follow":
+    #         follow = d
+    #         break
+    #
+    # if follow:
+    #     while True:
+    #         print(follow.text.strip() + " - not following yet")
+    #         driver.execute_script("arguments[0].focus(); arguments[0].click();", follow)
+    #         time.sleep(1)
+    #         if follow.text == "Following":
+    #             break
+    #
+    # else:
+    #     print('Element not found')
+    #     return None
     pass
 
 
@@ -154,25 +210,38 @@ def get_reel_duration(current_reel):
         print(f"An error occurred while getting the reel duration: {e}")
         return None
 
+def if_in_user_db(uploader, political_bias):
+    with open("../data_input/db/lra_dataset.csv", mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if row["UPLOADER"] == uploader and row["LRA"] == political_bias:
+                return True
+    return False
+
 
 header = [
-    "account", "session", "url", "reel_like_count", "reel_comment_count",
-    "reel_duration", "watch_time_seconds", "watch_time_percentage", "liked",
-    "positive_comment", "followed", "shared", "saved", "visited_profile",
+    "account", "session", "url",
+    "reel_like_count", "reel_comment_count","reel_duration",
+    "watch_time_seconds", "watch_time_percentage",
+    "liked", "positive_comment", "followed", "shared", "saved", "visited_profile",
     "negative_comment", "not_interested", "uploader", "caption", "datetime"
 ]
 
 
-def scrape(username, password, session, watch_time_percentage, liked, pos_comment_left,
-           followed, shared, saved, profile_visited,
-           neg_comment_left, clicked_not_interested, quit_after, condition):
+
+def scrape(username, password,
+           session,
+           watch_time_percentage,
+           liked, pos_comment_left, followed, shared, saved, profile_visited, neg_comment_left, clicked_not_interested,
+           quit_after, condition, political_bias):
     def format_seconds(time):
         minutes = int(time // 60)
         remaining_seconds = int(time % 60)
         formatted_time = f"{minutes:02d}:{remaining_seconds:02d}"
         return formatted_time
 
-    counter = 0
+    reels_counter = 0
+    global header
     pcomlft = 0
     ncomlft = 0
 
@@ -181,7 +250,8 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
     open_reels.open_reels(username, password)
 
     actions.move_by_offset(100, 100).click().perform()
-    while counter <= quit_after:
+
+    while reels_counter <= quit_after:
         try:
             time.sleep(1)
             # get current reel
@@ -212,6 +282,7 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
 
             url = driver.current_url
             stripped_remove_instagram_com_url = url.replace("https://www.instagram.com/", "")
+
             duration = get_reel_duration(current_reel)
 
             # PRINT ###################################################################################################
@@ -227,7 +298,9 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
 
 
             # CONDITIONAL BEHAVIOR
-            if (condition == 1) or (condition == 2 and conditions.if_in_user_db(reel_data[0])):
+            # if parameter condition is 1, then do everything for every reel
+            # if parameter condition is 2, then only do everything if the uploader is in the dataset AND the political bias is the same
+            if (condition == 1) or (condition == 2 and if_in_user_db(reel_data[0], political_bias)):
                 if liked:
                     brute_force_click(get_like(current_reel))
                     print("+ 1 ❤️", end=" ")
@@ -279,20 +352,11 @@ def scrape(username, password, session, watch_time_percentage, liked, pos_commen
                 csv.writer(csvfile).writerows(data)
 
             scroll()
-            counter += 1
-            print(str(counter) + " reels watched. Scrolling...")
+            reels_counter += 1
+            print(str(reels_counter) + " reels watched. Scrolling...")
 
         except Exception as e:
             print(f"An error occurred: {e}")
             break
 
     driver.quit()
-
-# todo: fix click_like
-# todo: fix click_save
-# todo: fix click_follow
-# todo: fix click_not_interested
-
-# todo: fix leave_comment
-# todo: fix visit_profile
-# todo: fix share

@@ -6,15 +6,20 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
 from selenium import webdriver
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Set up Chrome options to use Mitmproxy
-chrome_options = Options()
+chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--proxy-server=http://127.0.0.1:8080')
 # chrome_options.add_argument('--headless')  # Enable headless mode
 # chrome_options.add_argument('--disable-gpu')  # Disable GPU acceleration
-chrome_options.add_argument('--no-sandbox')  # Bypass OS security model
-chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
-driver = webdriver.Chrome(service=Service(r'C:\Users\User\Developments\PycharmProjects\comp396\chromedriver.exe'))
+# chrome_options.add_argument('--no-sandbox')  # Bypass OS security model
+# chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
+driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager().install()),
+    options=chrome_options,
+)
 
 
 # wait variables

@@ -33,7 +33,8 @@ def open_reels(username, password):
     print("╭──────╮")
     print("│SUBMIT│")
     print("╰──────╯")
-    #
+    time.sleep(9)
+
     # # click on not now button 1
     # for i in range(5):
     #     try:
@@ -55,7 +56,5 @@ def open_reels(username, password):
     # Not_Now_button.click()
     # print("[Not Now]")
 
-    # open reels
-    time.sleep(6)
     driver.get('https://www.instagram.com/reels/')
     print('⎣ www.instagram.com/reels/ ⎦')

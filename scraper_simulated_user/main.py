@@ -1,12 +1,12 @@
 import scraper_simulated_user.doomscroller as scraper
 
-# # open session_counter.txt and read the number of sessions
-# with open("session_counter.txt", "r") as f:
-#     session_counter = int(f.read())
+# open counter.txt and read the number of sessions
+with open("../data_output/sessions/counter.txt", "r") as f:
+    session_counter = int(f.read())
+print("Session #" + str(session_counter))
 
-scraper.scrape("michealjoneshenny",
-               "benis1234",
-               1,
+scraper.scrape("michealjoneshenny","benis1234",
+               session_counter,
                0.3,
                0,
                "",
@@ -16,10 +16,12 @@ scraper.scrape("michealjoneshenny",
                0,
                "",
                0,
-               10,
-               1)
+               10,1, 0)
 
 # increment the session counter
-# session_counter += 1
+session_counter += 1
+# write the new session counter to counter.txt
+with open("../data_output/sessions/counter.txt", "w") as f:
+    f.write(str(session_counter))
 
 
