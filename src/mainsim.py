@@ -1,11 +1,11 @@
-import scraper_simulated_user.doomscroller as scraper
+import src.doomscroller as scraper
 import csv
 # open counter.txt and read the number of sessions
-with open("../data_output/sessions/counter.txt", "r") as f:
+with open("../output/sessions/counter.txt", "r") as f:
     session_counter = int(f.read())
 print("Session #" + str(session_counter))
 
-with open('../data_input/db/users.csv', newline='') as f:
+with open('../input/db/users.csv', newline='') as f:
     reader = csv.DictReader(f)
     creds = [(row['username'], row['password']) for row in reader]
 
@@ -28,7 +28,7 @@ scraper.scrape(username, password,
 # increment the session counter
 session_counter += 1
 # write the new session counter to counter.txt
-with open("../data_output/sessions/counter.txt", "w") as f:
+with open("../output/sessions/counter.txt", "w") as f:
     f.write(str(session_counter))
 
 

@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 import time
 import csv
 
-import scraper_simulated_user.open_ig as open_reels
+import src.open_ig as open_reels
 import drivers.driver_chrome as cdriver
 
 driver = cdriver.driver
@@ -210,7 +210,7 @@ def get_reel_duration(current_reel):
         return None
 
 def if_in_user_db(uploader, political_bias):
-    with open("../data_input/db/lra_dataset.csv", mode='r', newline='', encoding='utf-8') as file:
+    with open("../input/db/lra_dataset.csv", mode='r', newline='', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             if row["UPLOADER"] == uploader and row["LRA"] == political_bias:
@@ -340,7 +340,7 @@ def scrape(username, password,
                  clicked_not_interested, reel_data[0], reel_data[1], datetime]
             ]
 
-            with open('../data_output/sessions/output.csv', 'a', newline='', encoding='utf-8') as csvfile:
+            with open('../output/sessions/output.csv', 'a', newline='', encoding='utf-8') as csvfile:
                 csv.writer(csvfile).writerows(data)
 
             scroll()

@@ -1,13 +1,12 @@
 import boto3
 import os
-from data_input.keys.credentials import aws_access_key_id, aws_secret_access_key
-
+from input.keys.credentials import aws_access_key_id, aws_secret_access_key
 
 def upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_access_key):
     # Initialize a session using Amazon S3
     s3 = boto3.client(
-        's3',
-        aws_access_key_id=aws_access_key_id,
+        's3', 
+        aws_access_key_id=aws_access_key_id, 
         aws_secret_access_key=aws_secret_access_key
     )
 
@@ -19,9 +18,9 @@ def upload_to_s3(file_path, bucket_name, s3_key, aws_access_key_id, aws_secret_a
         print(f"Failed to upload {file_path} to s3://{bucket_name}/{s3_key}")
         print(e)
 
-
 # Folder containing the images to upload
-folder_path = 'data_input/screenshots'
+folder_path = '../output/screenshots'
 
 # S3 bucket name
 bucket_name = "socialcomputing"
+

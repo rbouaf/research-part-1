@@ -1,0 +1,238 @@
+# make sure to run with  python -m src.dataCollect
+# current issue: very small % of reels recommended are political. LLM is accurate, but it would take forever if only 1/30 are poli
+import textwrap
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+import time
+import csv
+
+import src.open_ig as open_reels
+import drivers.driver_chrome as cdriver
+# Import dependencies
+from selenium import webdriver
+from PIL import Image
+from io import BytesIO
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+import time
+from selenium.webdriver.chrome.service import Service
+
+from input.keys.credentials import aws_access_key_id, aws_secret_access_key
+
+from aws import upload_to_s3
+from categorizor import categorize_images
+
+
+
+
+driver = cdriver.driver
+
+wait5 = cdriver.wait5
+wait10 = cdriver.wait10
+wait2 = cdriver.wait2
+
+actions = ActionChains(driver)
+
+
+
+
+
+
+
+profile_button = None
+profile_name = None
+def counter():
+    with open("../output/lra/screenshots/counter.txt", "r") as file:
+        count = int(file.read())
+    with open("../output/lra/screenshots/counter.txt", "w") as file:
+        file.write(str(count + 1))
+    return count
+global_counter = counter()
+left = 575
+top = 25
+right = 1560
+bottom = 1125
+
+# Important functions
+def get_current_reel(driver):
+    active_reel = driver.find_element(By.CLASS_NAME, 'xuzhngd')
+    current_reel = active_reel.find_element(By.XPATH, '.. /.. /.. / ..')
+    return current_reel
+
+
+def scroll():
+    # get document body
+    body = driver.find_element(By.TAG_NAME, 'body')
+    body.send_keys(Keys.ARROW_DOWN)
+
+
+# More complex behaviors
+def visit_profile(profile_button):
+
+    pass
+
+
+def get_reel_duration(current_reel):
+    try:
+        video_element = current_reel.find_element(By.TAG_NAME, 'video')
+        if video_element:
+            duration = driver.execute_script("return arguments[0].duration;", video_element)
+            return duration
+        else:
+            print("Video element not found")
+            return None
+
+    except Exception as e:
+        print(f"An error occurred while getting the reel duration: {e}")
+        return None
+
+header = [
+    "UPLOADER", "LR"
+]
+localcounter = 0
+thumbnails = []
+def upload_file():
+    upload_to_s3(f'../output/lra/screenshots/{global_counter}sc{localcounter}-new.png',
+                 'socialcomputing',
+                 f'ig_reels/{global_counter}sc{localcounter}-new.png',
+                 aws_access_key_id,
+                 aws_secret_access_key)
+def open_profile():
+    current_reel = driver.find_element(By.CLASS_NAME, 'xuzhngd')
+    parent_div = current_reel.find_element(By.XPATH, '.. /.. /..')
+
+    profile_button = parent_div.find_element(By.CSS_SELECTOR, 'img[alt*="profile picture"]')
+    print("got profile button")
+    user_disorganized = profile_button.get_attribute('alt')
+    profile_name = user_disorganized.split(' profile picture')[0]
+    print(profile_name)
+    profile_button.click()
+    print("Arrived at profile")
+
+
+
+def scrape(username, password, quit_after):
+    global localcounter
+    def format_seconds(time):
+        minutes = int(time // 60)
+        remaining_seconds = int(time % 60)
+        formatted_time = f"{minutes:02d}:{remaining_seconds:02d}"
+        return formatted_time
+
+    reels_counter = 0
+    global header
+    pcomlft = 0
+    ncomlft = 0
+
+    time.sleep(1)
+
+    open_reels.open_reels(username, password)
+
+    actions.move_by_offset(100, 100).click().perform()
+
+    while reels_counter < quit_after:
+        try:
+            time.sleep(1)
+            localcounter += 1
+
+            # get current reel
+            current_reel = get_current_reel(driver)
+            parent_div = current_reel.find_element(By.XPATH, '.. /.. /..')
+
+            reel_info = driver.execute_script(
+                'return Array.from(arguments[0].querySelectorAll(\'span\')).map(el => el.textContent);'
+                , current_reel
+            )
+            seen = set()
+            reel_data = [x for x in reel_info if not (x in seen or seen.add(x))]
+            expand_caption = False
+            if '… more' in reel_data:
+                expand_caption = True
+
+            for e in reel_data:
+                # this is not elegant but more readable.
+                if e == '' or e == ' ' or e == '\n' or e == '•' or e == '•' or e == '… more' or e == 'Like':
+                    reel_data.remove(e)
+            reel_data = [e for e in reel_data if 'Original audio' not in e]
+            if reel_data[-2] == 'Likes':
+                reel_data[-2] = -1
+
+            profile_name = reel_data[0]
+            open_profile()
+
+            driver.execute_script("document.body.style.zoom='50%'")
+            png = driver.get_screenshot_as_png()
+            im = Image.open(BytesIO(png))
+            im = im.crop((left, top, right, bottom))
+            im.save('../output/lra/screenshots/' + f'{global_counter}sc{localcounter}-new.png')
+
+            thumbnails = [f'https://socialcomputing.s3.amazonaws.com/ig_reels/{global_counter}sc{localcounter}-new.png']
+            print(thumbnails)
+
+            time.sleep(1)
+            upload_file()
+
+            print(categorize_images(thumbnails))
+            result = categorize_images(thumbnails)
+            bias = ''
+            if result == 'LEFT':
+                bias = 'L'
+            elif result == 'RIGHT':
+                bias = 'R'
+
+            #
+            # ######## trimming process ######
+            # seen = set()
+            # reel_data = [x for x in reel_info if not (x in seen or seen.add(x))]
+            # expand_caption = False
+            # if '… more' in reel_data:
+            #     expand_caption = True
+            #
+            # for e in reel_data:
+            #     # this is not elegant but more readable.
+            #     if e == '' or e == ' ' or e == '\n' or e == '•' or e == '•' or e == '… more' or e == 'Like':
+            #         reel_data.remove(e)
+            # reel_data = [e for e in reel_data if 'Original audio' not in e]
+            # if reel_data[-2] == 'Likes':
+            #     reel_data[-2] = -1
+            #
+            # url = driver.current_url
+            # stripped_remove_instagram_com_url = url.replace("https://www.instagram.com/", "")
+            #
+            # duration = get_reel_duration(current_reel)
+            #
+            # # PRINT ###################################################################################################
+            # print("╭─────────────────────────────────────────────────────")
+            # print("│ " + driver.current_url + " • " + format_seconds(duration))
+            # print("│ ⬤ " + reel_data[0] + " • [Fᴏʟʟᴏᴡ]")
+            # wrapped_text = textwrap.fill(reel_data[1], 52)
+            # formatted_lines = [f"│ {line} " for line in wrapped_text.splitlines()]
+            # print('\n'.join(formatted_lines))
+            # print("│ ♥ " + str(reel_data[-2]) + " 🗨 " + str(reel_data[-1]) + " ▮" + " 🢅 ")
+            # print("╰─────────────────────────────────────────────────────")
+            # ###########################################################################################################
+
+
+            data = [
+                [reel_data[0], bias]
+            ]
+
+            with open('../output/lra/lra_dataset.csv', 'a', newline='', encoding='utf-8') as csvfile:
+                csv.writer(csvfile).writerows(data)
+
+            driver.back()
+            time.sleep(8)
+
+            scroll()
+            reels_counter += 1
+            print(str(reels_counter) + " reels watched. Scrolling...")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            break
+
+    driver.quit()
