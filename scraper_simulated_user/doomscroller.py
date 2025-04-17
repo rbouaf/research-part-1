@@ -218,7 +218,6 @@ def if_in_user_db(uploader, political_bias):
                 return True
     return False
 
-
 header = [
     "account", "session", "url",
     "reel_like_count", "reel_comment_count","reel_duration",
@@ -226,8 +225,6 @@ header = [
     "liked", "positive_comment", "followed", "shared", "saved", "visited_profile",
     "negative_comment", "not_interested", "uploader", "caption", "datetime"
 ]
-
-
 
 def scrape(username, password,
            session,
@@ -277,9 +274,6 @@ def scrape(username, password,
             if reel_data[-2] == 'Likes':
                 reel_data[-2] = -1
 
-
-
-
             url = driver.current_url
             stripped_remove_instagram_com_url = url.replace("https://www.instagram.com/", "")
 
@@ -295,7 +289,6 @@ def scrape(username, password,
             print("│ ♥ " + str(reel_data[-2]) + " 🗨 " + str(reel_data[-1]) + " ▮" + " 🢅 ")
             print("╰─────────────────────────────────────────────────────")
             ###########################################################################################################
-
 
             # CONDITIONAL BEHAVIOR
             # if parameter condition is 1, then do everything for every reel
