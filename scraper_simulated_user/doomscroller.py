@@ -247,7 +247,7 @@ def scrape(username, password,
 
     actions.move_by_offset(100, 100).click().perform()
 
-    while reels_counter <= quit_after:
+    while reels_counter < quit_after:
         try:
             time.sleep(1)
             # get current reel
