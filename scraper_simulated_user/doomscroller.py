@@ -8,7 +8,6 @@ import csv
 
 import scraper_simulated_user.open_ig as open_reels
 import drivers.driver_chrome as cdriver
-import scraper_simulated_user.conditions as conditions
 
 driver = cdriver.driver
 
@@ -341,7 +340,7 @@ def scrape(username, password,
                  clicked_not_interested, reel_data[0], reel_data[1], datetime]
             ]
 
-            with open('../data_output/data_output.csv', 'a', newline='', encoding='utf-8') as csvfile:
+            with open('../data_output/sessions/output.csv', 'a', newline='', encoding='utf-8') as csvfile:
                 csv.writer(csvfile).writerows(data)
 
             scroll()
