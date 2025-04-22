@@ -1,16 +1,8 @@
-# make sure to run with  python -m src.dataCollect
-# current issue: very small % of reels recommended are political. LLM is accurate, but it would take forever if only 1/30 are poli
+# Run with C:\Users\User\Developments\PycharmProjects\comp396\.venv\Scripts\python.exe -m src.maincol
 import textwrap
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import ActionChains
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 import time
 import csv
 
-import src.open_ig as open_reels
-import drivers.driver_chrome as cdriver
-# Import dependencies
 from selenium import webdriver
 from PIL import Image
 from io import BytesIO
@@ -18,16 +10,19 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-import time
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+
 
 from input.keys.credentials import aws_access_key_id, aws_secret_access_key
+import drivers.driver_chrome as cdriver
 
-from aws import upload_to_s3
-from categorizor import categorize_images
-
-
-
+import src.open_ig as open_reels
+from src.aws import upload_to_s3
+from src.categorizor import categorize_images
 
 driver = cdriver.driver
 
@@ -36,12 +31,6 @@ wait10 = cdriver.wait10
 wait2 = cdriver.wait2
 
 actions = ActionChains(driver)
-
-
-
-
-
-
 
 profile_button = None
 profile_name = None
