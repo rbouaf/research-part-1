@@ -35,26 +35,33 @@ def open_reels(username, password):
     print("╰──────╯")
     time.sleep(9)
 
-    # # click on not now button 1
-    # for i in range(5):
-    #     try:
-    #         element_text = "Not now"
-    #         not_now_button = wait10.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{element_text}']")))
-    #
-    #         not_now_button.click()
-    #         print("[Not now]")
-    #         break
-    #     except Exception as e:
-    #         print(f"Attempt {i + 1} failed: {e}")
-    #         time.sleep(2)
-    #
-    # # click on not now button 2
-    # # Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,
-    # #                                                           '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
-    # time.sleep(1)
-    # Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
-    # Not_Now_button.click()
-    # print("[Not Now]")
+    # click on not now button 1
+    # wrap in ty except
+    try:
+        for i in range(5):
+            try:
+                element_text = "Not now"
+                not_now_button = wait10.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{element_text}']")))
+
+                not_now_button.click()
+                print("[Not now]")
+                break
+            except Exception as e:
+                print(f"Attempt {i + 1} failed: {e}")
+                time.sleep(2)
+    except Exception as e:
+        print(f"Failed to click Not now button: {e}")
+
+    # click on not now button 2
+    # Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,
+    #                                                           '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
+    time.sleep(1)
+    try:
+        Not_Now_button = wait10.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]')))
+        Not_Now_button.click()
+        print("[Not Now]")
+    except Exception as e:
+        print(f"Failed to click Not Now button: {e}")
 
     driver.get('https://www.instagram.com/reels/')
     print('⎣ www.instagram.com/reels/ ⎦')

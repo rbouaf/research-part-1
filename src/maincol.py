@@ -5,9 +5,9 @@ with open('../input/db/users.csv', newline='') as f:
     reader = csv.DictReader(f)
     creds = [(row['username'], row['password']) for row in reader]
 
-username, password = creds[0]
+username, password = creds[2]
 print(f"Logging in {username} with password {password!r}")
 
-scraper.scrape(username, password, 3)
+scraper.scrape(username, password, 9999999999999)
 
 

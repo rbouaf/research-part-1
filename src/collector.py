@@ -52,10 +52,6 @@ def counter():
         file.write(str(count + 1))
     return count
 global_counter = counter()
-left = 575
-top = 25
-right = 1560
-bottom = 1125
 
 # Important functions
 def get_current_reel(driver):
@@ -67,6 +63,8 @@ def get_current_reel(driver):
 def scroll():
     # get document body
     body = driver.find_element(By.TAG_NAME, 'body')
+    # click on the body to focus
+    body.click()
     body.send_keys(Keys.ARROW_DOWN)
 
 
@@ -117,9 +115,9 @@ def open_profile():
 
 def scrape(username, password, quit_after):
     global localcounter
-    def format_seconds(time):
-        minutes = int(time // 60)
-        remaining_seconds = int(time % 60)
+    def format_seconds(sometime):
+        minutes = int(sometime // 60)
+        remaining_seconds = int(sometime % 60)
         formatted_time = f"{minutes:02d}:{remaining_seconds:02d}"
         return formatted_time
 
@@ -128,7 +126,6 @@ def scrape(username, password, quit_after):
     pcomlft = 0
     ncomlft = 0
 
-    time.sleep(1)
 
     open_reels.open_reels(username, password)
 
@@ -163,26 +160,58 @@ def scrape(username, password, quit_after):
 
             profile_name = reel_data[0]
             open_profile()
+            time.sleep(3)
 
-            driver.execute_script("document.body.style.zoom='50%'")
+
+            driver.execute_script("document.body.style.zoom='60%'")
+
+
+
+            element = driver.find_element(By.CSS_SELECTOR, "main > *:first-child")
+
+            driver.execute_script("arguments[0].scrollIntoView(true);", element)
+            time.sleep(1)
+
             png = driver.get_screenshot_as_png()
-            im = Image.open(BytesIO(png))
-            im = im.crop((left, top, right, bottom))
-            im.save('../output/lra/screenshots/' + f'{global_counter}sc{localcounter}-new.png')
+            img = Image.open(BytesIO(png))
 
+            location = element.location
+            size = element.size
+
+            left = location['x']
+            top = location['y']
+            right = left + size['width']
+            bottom = top + size['height']
+
+            left = max(0, left)
+            top = max(0, top)
+            right = min(img.width, right)
+            bottom = min(img.height, bottom)
+
+            element_screenshot = img.crop((left, top, right, bottom))
+            element_screenshot.save('../output/lra/screenshots/' + f'{global_counter}sc{localcounter}-new.png')
             thumbnails = [f'https://socialcomputing.s3.amazonaws.com/ig_reels/{global_counter}sc{localcounter}-new.png']
-            print(thumbnails)
 
             time.sleep(1)
             upload_file()
 
-            print(categorize_images(thumbnails))
+            driver.back()
+            time.sleep(2)
+            driver.execute_script("document.body.style.zoom='100%'")
+            time.sleep(2)
+            scroll()
+            time.sleep(2)
+
             result = categorize_images(thumbnails)
             bias = ''
-            if result == 'LEFT':
+            result = [x.upper() for x in result]
+            if 'LEFT' in result:
                 bias = 'L'
-            elif result == 'RIGHT':
+            elif 'RIGHT' in result:
                 bias = 'R'
+            elif 'APOLITICAL' in result:
+                bias = 'A'
+
 
             #
             # ######## trimming process ######
@@ -224,10 +253,7 @@ def scrape(username, password, quit_after):
             with open('../output/lra/lra_dataset.csv', 'a', newline='', encoding='utf-8') as csvfile:
                 csv.writer(csvfile).writerows(data)
 
-            driver.back()
-            time.sleep(8)
 
-            scroll()
             reels_counter += 1
             print(str(reels_counter) + " reels watched. Scrolling...")
 

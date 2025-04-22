@@ -38,5 +38,4 @@ def categorize_images(thumbnails):
             ]
         )
         descriptions.append(completion.choices[0].message.content)
-    print(descriptions)
     return descriptions
