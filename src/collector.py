@@ -2,6 +2,7 @@
 import textwrap
 import time
 import csv
+import os
 
 from selenium import webdriver
 from PIL import Image
@@ -34,13 +35,14 @@ actions = ActionChains(driver)
 
 profile_button = None
 profile_name = None
-def counter():
-    with open("../output/lra/screenshots/counter.txt", "r") as file:
-        count = int(file.read())
-    with open("../output/lra/screenshots/counter.txt", "w") as file:
-        file.write(str(count + 1))
-    return count
-global_counter = counter()
+
+count = 0
+path_to_counter = os.path.join("output", "lra", "screenshots", "counter.txt")
+with open(path_to_counter, "r") as file:
+    count = int(file.read())
+with open(path_to_counter, "w") as file:
+    file.write(str(count + 1))
+global_counter = count
 
 # Important functions
 def get_current_reel(driver):
@@ -83,7 +85,8 @@ header = [
 localcounter = 0
 thumbnails = []
 def upload_file():
-    upload_to_s3(f'../output/lra/screenshots/{global_counter}sc{localcounter}-new.png',
+    path = os.path.join("output", "lra", "screenshots")
+    upload_to_s3(f'{path}{global_counter}sc{localcounter}-new.png',
                  'socialcomputing',
                  f'ig_reels/{global_counter}sc{localcounter}-new.png',
                  aws_access_key_id,
@@ -178,7 +181,8 @@ def scrape(username, password, quit_after):
             bottom = min(img.height, bottom)
 
             element_screenshot = img.crop((left, top, right, bottom))
-            element_screenshot.save('../output/lra/screenshots/' + f'{global_counter}sc{localcounter}-new.png')
+            path_to_sc = os.path.join("output", "lra", "screenshots")
+            element_screenshot.save(path_to_sc + f'{global_counter}sc{localcounter}-new.png')
             thumbnails = [f'https://socialcomputing.s3.amazonaws.com/ig_reels/{global_counter}sc{localcounter}-new.png']
 
             time.sleep(1)
@@ -238,8 +242,8 @@ def scrape(username, password, quit_after):
             data = [
                 [reel_data[0], bias]
             ]
-
-            with open('../output/lra/lra_dataset.csv', 'a', newline='', encoding='utf-8') as csvfile:
+            path_to_lra = os.path.join("output", "lra", "lra_dataset.csv")
+            with open(path_to_lra, 'a', newline='', encoding='utf-8') as csvfile:
                 csv.writer(csvfile).writerows(data)
 
 

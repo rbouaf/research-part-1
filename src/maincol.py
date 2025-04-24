@@ -1,7 +1,8 @@
 import src.collector as scraper
 import csv
-
-with open('../input/db/users.csv', newline='') as f:
+import os
+path_to_users = os.path.join("input", "db", "users.csv")
+with open(path_to_users, newline='') as f:
     reader = csv.DictReader(f)
     creds = [(row['username'], row['password']) for row in reader]
 
