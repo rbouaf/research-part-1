@@ -9,7 +9,7 @@ with open('../input/db/users.csv', newline='') as f:
     reader = csv.DictReader(f)
     creds = [(row['username'], row['password']) for row in reader]
 
-username, password = creds[0]
+username, password = creds[0] # modify this to get a specific user scraper. (the number represents Row Number)
 print(f"Logging in {username} with password {password!r}")
 
 scraper.scrape(username, password,
