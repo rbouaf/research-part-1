@@ -1,0 +1,5 @@
+/input/logging_client_events
+/input/aws
+__pycache__/
+*.pyc
+/.venv
